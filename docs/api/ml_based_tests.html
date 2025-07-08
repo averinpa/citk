@@ -1,0 +1,197 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Machine Learning-Based Tests &mdash; citk 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=2709fde1"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Statistical Model-Based Tests" href="statistical_model_tests.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            citk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="simple_tests.html">Simple Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="statistical_model_tests.html">Statistical Model-Based Tests</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Machine Learning-Based Tests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.ml_based_tests.CRIT"><code class="docutils literal notranslate"><span class="pre">CRIT</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.ml_based_tests.DML"><code class="docutils literal notranslate"><span class="pre">DML</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.ml_based_tests.EDML"><code class="docutils literal notranslate"><span class="pre">EDML</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.ml_based_tests.KCI"><code class="docutils literal notranslate"><span class="pre">KCI</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#citk.tests.ml_based_tests.KCI.__init__"><code class="docutils literal notranslate"><span class="pre">KCI.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.ml_based_tests.RandomForest"><code class="docutils literal notranslate"><span class="pre">RandomForest</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.ml_based_tests.conformalized_ci_test"><code class="docutils literal notranslate"><span class="pre">conformalized_ci_test()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.ml_based_tests.dcor_test"><code class="docutils literal notranslate"><span class="pre">dcor_test()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.ml_based_tests.e_value_dml_ci_test"><code class="docutils literal notranslate"><span class="pre">e_value_dml_ci_test()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.ml_based_tests.get_dml_residuals"><code class="docutils literal notranslate"><span class="pre">get_dml_residuals()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">citk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Machine Learning-Based Tests</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ml_based_tests.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="machine-learning-based-tests">
+<h1>Machine Learning-Based Tests<a class="headerlink" href="#machine-learning-based-tests" title="Link to this heading"></a></h1>
+<p>This module contains modern, flexible conditional independence tests that leverage machine learning models.</p>
+<dl class="py class" id="module-citk.tests.ml_based_tests">
+<dt class="sig sig-object py" id="citk.tests.ml_based_tests.CRIT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.ml_based_tests.</span></span><span class="sig-name descname"><span class="pre">CRIT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/ml_based_tests.html#CRIT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.ml_based_tests.CRIT" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></p>
+<p>Conformalized Residual Independence Test (CRIT).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="citk.tests.ml_based_tests.DML">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.ml_based_tests.</span></span><span class="sig-name descname"><span class="pre">DML</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/ml_based_tests.html#DML"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.ml_based_tests.DML" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></p>
+<p>Double-ML based conditional independence test.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="citk.tests.ml_based_tests.EDML">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.ml_based_tests.</span></span><span class="sig-name descname"><span class="pre">EDML</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/ml_based_tests.html#EDML"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.ml_based_tests.EDML" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></p>
+<p>E-Value Double-ML based conditional independence test.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="citk.tests.ml_based_tests.KCI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.ml_based_tests.</span></span><span class="sig-name descname"><span class="pre">KCI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/ml_based_tests.html#KCI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.ml_based_tests.KCI" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></p>
+<p>Wrapper for the Kernel Conditional Independence (KCI) test from the causal-learn library.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="citk.tests.ml_based_tests.KCI.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/ml_based_tests.html#KCI.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.ml_based_tests.KCI.__init__" title="Link to this definition"></a></dt>
+<dd><section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>The dataset from which to run the test.</p>
+</dd>
+<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs<span class="classifier">dict</span></dt><dd><p>Additional keywords for the KCI test. See causal-learn documentation.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="citk.tests.ml_based_tests.RandomForest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.ml_based_tests.</span></span><span class="sig-name descname"><span class="pre">RandomForest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/ml_based_tests.html#RandomForest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.ml_based_tests.RandomForest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></p>
+<p>Performs a conditional independence test using Random Forest feature importance.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="citk.tests.ml_based_tests.conformalized_ci_test">
+<span class="sig-prename descclassname"><span class="pre">citk.tests.ml_based_tests.</span></span><span class="sig-name descname"><span class="pre">conformalized_ci_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_perms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">199</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/ml_based_tests.html#conformalized_ci_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.ml_based_tests.conformalized_ci_test" title="Link to this definition"></a></dt>
+<dd><p>Performs the Conformalized Residual Independence Test (CRIT).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="citk.tests.ml_based_tests.dcor_test">
+<span class="sig-prename descclassname"><span class="pre">citk.tests.ml_based_tests.</span></span><span class="sig-name descname"><span class="pre">dcor_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_perms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">499</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/ml_based_tests.html#dcor_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.ml_based_tests.dcor_test" title="Link to this definition"></a></dt>
+<dd><p>The final-stage p-value test based on distance correlation.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="citk.tests.ml_based_tests.e_value_dml_ci_test">
+<span class="sig-prename descclassname"><span class="pre">citk.tests.ml_based_tests.</span></span><span class="sig-name descname"><span class="pre">e_value_dml_ci_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">U</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">betting_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/ml_based_tests.html#e_value_dml_ci_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.ml_based_tests.e_value_dml_ci_test" title="Link to this definition"></a></dt>
+<dd><p>Calculates an e-value on pre-computed residuals.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="citk.tests.ml_based_tests.get_dml_residuals">
+<span class="sig-prename descclassname"><span class="pre">citk.tests.ml_based_tests.</span></span><span class="sig-name descname"><span class="pre">get_dml_residuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/ml_based_tests.html#get_dml_residuals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.ml_based_tests.get_dml_residuals" title="Link to this definition"></a></dt>
+<dd><p>Generates high-quality DML residuals and normalizes them.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="statistical_model_tests.html" class="btn btn-neutral float-left" title="Statistical Model-Based Tests" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Pavel Averin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

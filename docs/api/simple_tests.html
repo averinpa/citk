@@ -1,0 +1,239 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Tests &mdash; citk 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=2709fde1"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Statistical Model-Based Tests" href="statistical_model_tests.html" />
+    <link rel="prev" title="Welcome to citk’s documentation!" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            citk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Simple Tests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.simple_tests.ChiSq"><code class="docutils literal notranslate"><span class="pre">ChiSq</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#citk.tests.simple_tests.ChiSq.__init__"><code class="docutils literal notranslate"><span class="pre">ChiSq.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.simple_tests.DCor"><code class="docutils literal notranslate"><span class="pre">DCor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#citk.tests.simple_tests.DCor.__init__"><code class="docutils literal notranslate"><span class="pre">DCor.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.simple_tests.FisherZ"><code class="docutils literal notranslate"><span class="pre">FisherZ</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#citk.tests.simple_tests.FisherZ.__init__"><code class="docutils literal notranslate"><span class="pre">FisherZ.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.simple_tests.GSq"><code class="docutils literal notranslate"><span class="pre">GSq</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#citk.tests.simple_tests.GSq.__init__"><code class="docutils literal notranslate"><span class="pre">GSq.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#citk.tests.simple_tests.Spearman"><code class="docutils literal notranslate"><span class="pre">Spearman</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#citk.tests.simple_tests.Spearman.__init__"><code class="docutils literal notranslate"><span class="pre">Spearman.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="statistical_model_tests.html">Statistical Model-Based Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ml_based_tests.html">Machine Learning-Based Tests</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">citk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Simple Tests</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/simple_tests.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="simple-tests">
+<h1>Simple Tests<a class="headerlink" href="#simple-tests" title="Link to this heading"></a></h1>
+<p>This module contains classical and simple non-parametric conditional independence tests.</p>
+<dl class="py class" id="module-citk.tests.simple_tests">
+<dt class="sig sig-object py" id="citk.tests.simple_tests.ChiSq">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.simple_tests.</span></span><span class="sig-name descname"><span class="pre">ChiSq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/simple_tests.html#ChiSq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.simple_tests.ChiSq" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></p>
+<p>Wrapper for the Chi-Square test from the causal-learn library.
+This test is suitable for discrete data.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="citk.tests.simple_tests.ChiSq.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/simple_tests.html#ChiSq.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.simple_tests.ChiSq.__init__" title="Link to this definition"></a></dt>
+<dd><section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>The dataset from which to run the test.</p>
+</dd>
+<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs<span class="classifier">dict</span></dt><dd><p>Additional keywords for the test.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="citk.tests.simple_tests.DCor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.simple_tests.</span></span><span class="sig-name descname"><span class="pre">DCor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/simple_tests.html#DCor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.simple_tests.DCor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></p>
+<p>Wrapper for the distance correlation test from the pingouin library.
+NOTE: This implementation only supports unconditional tests.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="citk.tests.simple_tests.DCor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/simple_tests.html#DCor.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.simple_tests.DCor.__init__" title="Link to this definition"></a></dt>
+<dd><section id="id3">
+<h2>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>The dataset from which to run the test.</p>
+</dd>
+<dt>n_boot<span class="classifier">int</span></dt><dd><p>Number of bootstraps for permutation test.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="citk.tests.simple_tests.FisherZ">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.simple_tests.</span></span><span class="sig-name descname"><span class="pre">FisherZ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/simple_tests.html#FisherZ"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.simple_tests.FisherZ" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></p>
+<p>A custom conditional independence test for partial correlation.
+This is functionally equivalent to Fisher-Z for continuous data.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="citk.tests.simple_tests.FisherZ.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/simple_tests.html#FisherZ.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.simple_tests.FisherZ.__init__" title="Link to this definition"></a></dt>
+<dd><section id="id4">
+<h2>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>The dataset from which to run the test.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="citk.tests.simple_tests.GSq">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.simple_tests.</span></span><span class="sig-name descname"><span class="pre">GSq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/simple_tests.html#GSq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.simple_tests.GSq" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></p>
+<p>Wrapper for the G-Square test from the causal-learn library.
+This test is suitable for discrete data.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="citk.tests.simple_tests.GSq.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/simple_tests.html#GSq.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.simple_tests.GSq.__init__" title="Link to this definition"></a></dt>
+<dd><section id="id5">
+<h2>Parameters<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>The dataset from which to run the test.</p>
+</dd>
+<dt><a href="#id6"><span class="problematic" id="id7">**</span></a>kwargs<span class="classifier">dict</span></dt><dd><p>Additional keywords for the test.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="citk.tests.simple_tests.Spearman">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.simple_tests.</span></span><span class="sig-name descname"><span class="pre">Spearman</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/simple_tests.html#Spearman"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.simple_tests.Spearman" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></p>
+<p>Wrapper for the Spearman partial correlation test from the pingouin library.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="citk.tests.simple_tests.Spearman.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/citk/tests/simple_tests.html#Spearman.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#citk.tests.simple_tests.Spearman.__init__" title="Link to this definition"></a></dt>
+<dd><section id="id8">
+<h2>Parameters<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>The dataset from which to run the test.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to citk’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="statistical_model_tests.html" class="btn btn-neutral float-right" title="Statistical Model-Based Tests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Pavel Averin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

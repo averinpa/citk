@@ -1,0 +1,425 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>citk.tests.ml_based_tests &mdash; citk 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=2709fde1"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            citk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/simple_tests.html">Simple Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/statistical_model_tests.html">Statistical Model-Based Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/ml_based_tests.html">Machine Learning-Based Tests</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">citk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">citk.tests.ml_based_tests</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for citk.tests.ml_based_tests</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestRegressor</span><span class="p">,</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">lightgbm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">lgb</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_predict</span><span class="p">,</span> <span class="n">KFold</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ridge</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dcor</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">CITKTest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">causallearn.utils.cit</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_ci_test</span><span class="p">,</span> <span class="n">KCI</span> <span class="k">as</span> <span class="n">KCI_test</span>
+
+
+<div class="viewcode-block" id="KCI">
+<a class="viewcode-back" href="../../../api/ml_based_tests.html#citk.tests.ml_based_tests.KCI">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KCI</span><span class="p">(</span><span class="n">CITKTest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper for the Kernel Conditional Independence (KCI) test from the causal-learn library.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="KCI.__init__">
+<a class="viewcode-back" href="../../../api/ml_based_tests.html#citk.tests.ml_based_tests.KCI.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : np.ndarray</span>
+<span class="sd">            The dataset from which to run the test.</span>
+<span class="sd">        **kwargs : dict</span>
+<span class="sd">            Additional keywords for the KCI test. See causal-learn documentation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_cache_method_consistent</span><span class="p">(</span><span class="s1">&#39;kci&#39;</span><span class="p">,</span> <span class="s2">&quot;NO SPECIFIED PARAMETERS&quot;</span><span class="p">)</span> <span class="c1"># KCI handles its own params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kci_instance</span> <span class="o">=</span> <span class="n">KCI_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">condition_set</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs the KCI test.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_formatted_XYZ_and_cachekey</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">condition_set</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cache_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">])</span>
+        
+        <span class="n">p_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kci_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">condition_set</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">p_value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">p_value</span></div>
+
+
+<span class="n">register_ci_test</span><span class="p">(</span><span class="s2">&quot;kci&quot;</span><span class="p">,</span> <span class="n">KCI</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="RandomForest">
+<a class="viewcode-back" href="../../../api/ml_based_tests.html#citk.tests.ml_based_tests.RandomForest">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RandomForest</span><span class="p">(</span><span class="n">CITKTest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs a conditional independence test using Random Forest feature importance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;n_estimators&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_permutations</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;num_permutations&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;random_state&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;n_est=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span><span class="si">}</span><span class="s2">,n_perm=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_permutations</span><span class="si">}</span><span class="s2">,seed=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_cache_method_consistent</span><span class="p">(</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">condition_set</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">condition_set</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">condition_set</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Ensure condition_set is a list, as causal-learn can pass it as a tuple</span>
+            <span class="n">condition_set</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">condition_set</span><span class="p">)</span>
+
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_formatted_XYZ_and_cachekey</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">condition_set</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cache_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">])</span>
+
+        <span class="c1"># Define predictor and target variables</span>
+        <span class="n">x_name</span><span class="p">,</span> <span class="n">y_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+        <span class="n">condition_names</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">condition_set</span><span class="p">]</span>
+        
+        <span class="n">predictor_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_name</span><span class="p">]</span> <span class="o">+</span> <span class="n">condition_names</span>
+        <span class="n">X_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">predictor_cols</span><span class="p">]</span>
+        <span class="n">y_series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">y_name</span><span class="p">]</span>
+        
+        <span class="c1"># Determine if it&#39;s a classification or regression task</span>
+        <span class="n">is_classification</span> <span class="o">=</span> <span class="n">y_series</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="ow">or</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_categorical_dtype</span><span class="p">(</span><span class="n">y_series</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_classification</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># 1. Calculate the observed statistic</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_df</span><span class="p">,</span> <span class="n">y_series</span><span class="p">)</span>
+        <span class="n">importances</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">feature_importances_</span>
+        <span class="n">x_index</span> <span class="o">=</span> <span class="n">X_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">x_name</span><span class="p">)</span>
+        <span class="n">observed_statistic</span> <span class="o">=</span> <span class="n">importances</span><span class="p">[</span><span class="n">x_index</span><span class="p">]</span>
+
+        <span class="c1"># 2. Generate the null distribution</span>
+        <span class="n">permuted_statistics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_permutations</span><span class="p">)</span>
+        <span class="n">y_permuted_np</span> <span class="o">=</span> <span class="n">y_series</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_permutations</span><span class="p">):</span>
+            <span class="c1"># Permute the target variable</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">y_permuted_np</span><span class="p">)</span>
+            
+            <span class="c1"># Re-train the model on the permuted data</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_df</span><span class="p">,</span> <span class="n">y_permuted_np</span><span class="p">)</span>
+            <span class="n">permuted_importances</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">feature_importances_</span>
+            <span class="n">permuted_statistics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">permuted_importances</span><span class="p">[</span><span class="n">x_index</span><span class="p">]</span>
+
+        <span class="c1"># 3. Calculate the p-value</span>
+        <span class="n">p_value</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">permuted_statistics</span> <span class="o">&gt;=</span> <span class="n">observed_statistic</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_permutations</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">p_value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">p_value</span></div>
+
+
+<span class="n">register_ci_test</span><span class="p">(</span><span class="s2">&quot;rf&quot;</span><span class="p">,</span> <span class="n">RandomForest</span><span class="p">)</span>
+
+<span class="c1"># Helper functions from instructions.md</span>
+<div class="viewcode-block" id="get_dml_residuals">
+<a class="viewcode-back" href="../../../api/ml_based_tests.html#citk.tests.ml_based_tests.get_dml_residuals">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_dml_residuals</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">x_idx</span><span class="p">,</span> <span class="n">y_idx</span><span class="p">,</span> <span class="n">z_idx</span><span class="p">,</span> <span class="n">cv_folds</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates high-quality DML residuals and normalizes them.&quot;&quot;&quot;</span>
+    <span class="n">X_target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">x_idx</span><span class="p">]</span>
+    <span class="n">Y_target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">y_idx</span><span class="p">]</span>
+    <span class="n">Z_features</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">z_idx</span><span class="p">]</span> <span class="k">if</span> <span class="n">z_idx</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">))</span>
+    
+    <span class="n">model</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">LGBMRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">Z_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">pred_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">X_target</span><span class="p">)</span>
+        <span class="n">pred_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">Y_target</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pred_x</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">Z_features</span><span class="p">,</span> <span class="n">X_target</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_folds</span><span class="p">)</span>
+        <span class="n">pred_y</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">Z_features</span><span class="p">,</span> <span class="n">Y_target</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_folds</span><span class="p">)</span>
+    
+    <span class="n">U</span> <span class="o">=</span> <span class="n">X_target</span> <span class="o">-</span> <span class="n">pred_x</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">Y_target</span> <span class="o">-</span> <span class="n">pred_y</span>
+    
+    <span class="c1"># Avoid division by zero if a residual is constant</span>
+    <span class="n">u_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+    <span class="n">v_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">/</span> <span class="n">u_std</span> <span class="k">if</span> <span class="n">u_std</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">U</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">V</span> <span class="o">/</span> <span class="n">v_std</span> <span class="k">if</span> <span class="n">v_std</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">V</span>
+    
+    <span class="k">return</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span></div>
+
+
+<div class="viewcode-block" id="dcor_test">
+<a class="viewcode-back" href="../../../api/ml_based_tests.html#citk.tests.ml_based_tests.dcor_test">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">dcor_test</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_perms</span><span class="o">=</span><span class="mi">499</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The final-stage p-value test based on distance correlation.&quot;&quot;&quot;</span>
+    <span class="n">obs_stat</span> <span class="o">=</span> <span class="n">dcor</span><span class="o">.</span><span class="n">distance_correlation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">y_shuffled</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">perm_stats</span> <span class="o">=</span> <span class="p">[</span><span class="n">dcor</span><span class="o">.</span><span class="n">distance_correlation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">y_shuffled</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_perms</span><span class="p">)]</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">perm_stats</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">obs_stat</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_perms</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="conformalized_ci_test">
+<a class="viewcode-back" href="../../../api/ml_based_tests.html#citk.tests.ml_based_tests.conformalized_ci_test">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">conformalized_ci_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">x_idx</span><span class="p">,</span> <span class="n">y_idx</span><span class="p">,</span> <span class="n">z_idx</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">cv_folds</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_perms</span><span class="o">=</span><span class="mi">199</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs the Conformalized Residual Independence Test (CRIT).&quot;&quot;&quot;</span>
+    <span class="n">X_target</span><span class="p">,</span> <span class="n">Y_target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">x_idx</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">y_idx</span><span class="p">]</span>
+    <span class="n">Z_features</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">z_idx</span><span class="p">]</span> <span class="k">if</span> <span class="n">z_idx</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">))</span>
+    
+    <span class="k">if</span> <span class="n">Z_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># Unconditional case, just run dcor test</span>
+        <span class="k">return</span> <span class="n">dcor_test</span><span class="p">(</span><span class="n">X_target</span><span class="p">,</span> <span class="n">Y_target</span><span class="p">,</span> <span class="n">n_perms</span><span class="o">=</span><span class="n">n_perms</span><span class="p">)</span>
+
+    <span class="n">all_indices</span><span class="p">,</span> <span class="n">all_true_x</span><span class="p">,</span> <span class="n">all_true_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="n">all_preds_x_low</span><span class="p">,</span> <span class="n">all_preds_x_high</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="n">all_preds_y_low</span><span class="p">,</span> <span class="n">all_preds_y_high</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">cv_folds</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+    <span class="n">lgbm_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;objective&#39;</span><span class="p">:</span> <span class="s1">&#39;quantile&#39;</span><span class="p">,</span> <span class="s1">&#39;metric&#39;</span><span class="p">:</span> <span class="s1">&#39;quantile&#39;</span><span class="p">,</span> <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="mi">400</span><span class="p">,</span> <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span> <span class="s1">&#39;verbose&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">calib_idx</span> <span class="ow">in</span> <span class="n">kf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">Z_features</span><span class="p">):</span>
+        <span class="n">Z_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span> <span class="o">=</span> <span class="n">Z_features</span><span class="p">[</span><span class="n">train_idx</span><span class="p">],</span> <span class="n">X_target</span><span class="p">[</span><span class="n">train_idx</span><span class="p">],</span> <span class="n">Y_target</span><span class="p">[</span><span class="n">train_idx</span><span class="p">]</span>
+        
+        <span class="c1"># Train and predict for X</span>
+        <span class="n">model_x_low</span><span class="p">,</span> <span class="n">model_x_high</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">LGBMRegressor</span><span class="p">(</span><span class="o">**</span><span class="n">lgbm_params</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">lgb</span><span class="o">.</span><span class="n">LGBMRegressor</span><span class="p">(</span><span class="o">**</span><span class="n">lgbm_params</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">alpha</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">model_x_low</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Z_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">);</span> <span class="n">model_x_high</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Z_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span>
+        <span class="n">all_preds_x_low</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">all_preds_x_low</span><span class="p">,</span> <span class="n">model_x_low</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Z_features</span><span class="p">[</span><span class="n">calib_idx</span><span class="p">])])</span>
+        <span class="n">all_preds_x_high</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">all_preds_x_high</span><span class="p">,</span> <span class="n">model_x_high</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Z_features</span><span class="p">[</span><span class="n">calib_idx</span><span class="p">])])</span>
+
+        <span class="c1"># Train and predict for Y</span>
+        <span class="n">model_y_low</span><span class="p">,</span> <span class="n">model_y_high</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">LGBMRegressor</span><span class="p">(</span><span class="o">**</span><span class="n">lgbm_params</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">lgb</span><span class="o">.</span><span class="n">LGBMRegressor</span><span class="p">(</span><span class="o">**</span><span class="n">lgbm_params</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">alpha</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">model_y_low</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Z_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">);</span> <span class="n">model_y_high</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Z_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)</span>
+        <span class="n">all_preds_y_low</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">all_preds_y_low</span><span class="p">,</span> <span class="n">model_y_low</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Z_features</span><span class="p">[</span><span class="n">calib_idx</span><span class="p">])])</span>
+        <span class="n">all_preds_y_high</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">all_preds_y_high</span><span class="p">,</span> <span class="n">model_y_high</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Z_features</span><span class="p">[</span><span class="n">calib_idx</span><span class="p">])])</span>
+        
+        <span class="n">all_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">all_indices</span><span class="p">,</span> <span class="n">calib_idx</span><span class="p">])</span>
+        <span class="n">all_true_x</span><span class="p">,</span> <span class="n">all_true_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">all_true_x</span><span class="p">,</span> <span class="n">X_target</span><span class="p">[</span><span class="n">calib_idx</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">all_true_y</span><span class="p">,</span> <span class="n">Y_target</span><span class="p">[</span><span class="n">calib_idx</span><span class="p">]])</span>
+
+    <span class="n">sort_order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">all_indices</span><span class="p">)</span>
+    <span class="n">true_x</span><span class="p">,</span> <span class="n">true_y</span> <span class="o">=</span> <span class="n">all_true_x</span><span class="p">[</span><span class="n">sort_order</span><span class="p">],</span> <span class="n">all_true_y</span><span class="p">[</span><span class="n">sort_order</span><span class="p">]</span>
+    <span class="n">preds_x_low</span><span class="p">,</span> <span class="n">preds_x_high</span> <span class="o">=</span> <span class="n">all_preds_x_low</span><span class="p">[</span><span class="n">sort_order</span><span class="p">],</span> <span class="n">all_preds_x_high</span><span class="p">[</span><span class="n">sort_order</span><span class="p">]</span>
+    <span class="n">preds_y_low</span><span class="p">,</span> <span class="n">preds_y_high</span> <span class="o">=</span> <span class="n">all_preds_y_low</span><span class="p">[</span><span class="n">sort_order</span><span class="p">],</span> <span class="n">all_preds_y_high</span><span class="p">[</span><span class="n">sort_order</span><span class="p">]</span>
+
+    <span class="n">scores_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">preds_x_low</span> <span class="o">-</span> <span class="n">true_x</span><span class="p">,</span> <span class="n">true_x</span> <span class="o">-</span> <span class="n">preds_x_high</span><span class="p">)</span>
+    <span class="n">scores_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">preds_y_low</span> <span class="o">-</span> <span class="n">true_y</span><span class="p">,</span> <span class="n">true_y</span> <span class="o">-</span> <span class="n">preds_y_high</span><span class="p">)</span>
+    <span class="n">q_level</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">q_x</span><span class="p">,</span> <span class="n">q_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">scores_x</span><span class="p">,</span> <span class="n">q_level</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">scores_y</span><span class="p">,</span> <span class="n">q_level</span><span class="p">)</span>
+
+    <span class="n">centers_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">preds_x_high</span> <span class="o">+</span> <span class="n">preds_x_low</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">widths_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">preds_x_high</span> <span class="o">-</span> <span class="n">preds_x_low</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">q_x</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="p">(</span><span class="n">true_x</span> <span class="o">-</span> <span class="n">centers_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">widths_x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">widths_x</span><span class="p">)</span>
+    <span class="n">centers_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">preds_y_high</span> <span class="o">+</span> <span class="n">preds_y_low</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">widths_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">preds_y_high</span> <span class="o">-</span> <span class="n">preds_y_low</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">q_y</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="p">(</span><span class="n">true_y</span> <span class="o">-</span> <span class="n">centers_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">widths_y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">widths_y</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">dcor_test</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">n_perms</span><span class="o">=</span><span class="n">n_perms</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="e_value_dml_ci_test">
+<a class="viewcode-back" href="../../../api/ml_based_tests.html#citk.tests.ml_based_tests.e_value_dml_ci_test">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">e_value_dml_ci_test</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">betting_folds</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates an e-value on pre-computed residuals.&quot;&quot;&quot;</span>
+    <span class="n">final_e_value</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">betting_folds</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">test_idx</span> <span class="ow">in</span> <span class="n">kf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">U</span><span class="p">):</span>
+        <span class="n">U_train</span><span class="p">,</span> <span class="n">U_test</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="n">train_idx</span><span class="p">],</span> <span class="n">U</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+        <span class="n">V_train</span><span class="p">,</span> <span class="n">V_test</span> <span class="o">=</span> <span class="n">V</span><span class="p">[</span><span class="n">train_idx</span><span class="p">],</span> <span class="n">V</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+        <span class="n">betting_model</span> <span class="o">=</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">betting_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">U_train</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">V_train</span><span class="p">)</span>
+        <span class="n">bets</span> <span class="o">=</span> <span class="n">betting_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">U_test</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">e_process_fold</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">bets</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span> <span class="o">*</span> <span class="n">V_test</span>
+        <span class="n">final_e_value</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">e_process_fold</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">final_e_value</span></div>
+
+
+<div class="viewcode-block" id="DML">
+<a class="viewcode-back" href="../../../api/ml_based_tests.html#citk.tests.ml_based_tests.DML">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DML</span><span class="p">(</span><span class="n">CITKTest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Double-ML based conditional independence test.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cv_folds</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cv_folds&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_perms</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;n_perms&#39;</span><span class="p">,</span> <span class="mi">199</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_cache_method_consistent</span><span class="p">(</span><span class="s1">&#39;dml&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;cv=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_folds</span><span class="si">}</span><span class="s2">,n_perms=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_perms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">condition_set</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">condition_set</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">condition_set</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span> <span class="n">condition_set</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">condition_set</span><span class="p">)</span>
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_formatted_XYZ_and_cachekey</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">condition_set</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cache_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">])</span>
+
+        <span class="n">U</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">get_dml_residuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">condition_set</span><span class="p">,</span> <span class="n">cv_folds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_folds</span><span class="p">)</span>
+        <span class="n">p_value</span> <span class="o">=</span> <span class="n">dcor_test</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">n_perms</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_perms</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">p_value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">p_value</span></div>
+
+
+<span class="n">register_ci_test</span><span class="p">(</span><span class="s2">&quot;dml&quot;</span><span class="p">,</span> <span class="n">DML</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CRIT">
+<a class="viewcode-back" href="../../../api/ml_based_tests.html#citk.tests.ml_based_tests.CRIT">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CRIT</span><span class="p">(</span><span class="n">CITKTest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conformalized Residual Independence Test (CRIT).&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cv_folds</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cv_folds&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_perms</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;n_perms&#39;</span><span class="p">,</span> <span class="mi">199</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;alpha=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="si">}</span><span class="s2">,cv=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_folds</span><span class="si">}</span><span class="s2">,n_perms=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_perms</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_cache_method_consistent</span><span class="p">(</span><span class="s1">&#39;crit&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">condition_set</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">condition_set</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">condition_set</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span> <span class="n">condition_set</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">condition_set</span><span class="p">)</span>
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_formatted_XYZ_and_cachekey</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">condition_set</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cache_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">])</span>
+
+        <span class="n">p_value</span> <span class="o">=</span> <span class="n">conformalized_ci_test</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">condition_set</span><span class="p">,</span> 
+                                        <span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="n">cv_folds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_folds</span><span class="p">,</span> <span class="n">n_perms</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_perms</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">p_value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">p_value</span></div>
+
+
+<span class="n">register_ci_test</span><span class="p">(</span><span class="s2">&quot;crit&quot;</span><span class="p">,</span> <span class="n">CRIT</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EDML">
+<a class="viewcode-back" href="../../../api/ml_based_tests.html#citk.tests.ml_based_tests.EDML">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EDML</span><span class="p">(</span><span class="n">CITKTest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;E-Value Double-ML based conditional independence test.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cv_folds</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cv_folds&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">betting_folds</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;betting_folds&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;cv=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_folds</span><span class="si">}</span><span class="s2">,bet_folds=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">betting_folds</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_cache_method_consistent</span><span class="p">(</span><span class="s1">&#39;edml&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">condition_set</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">condition_set</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">condition_set</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span> <span class="n">condition_set</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">condition_set</span><span class="p">)</span>
+        
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_formatted_XYZ_and_cachekey</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">condition_set</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cache_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">])</span>
+
+        <span class="n">U</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">get_dml_residuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">condition_set</span><span class="p">,</span> <span class="n">cv_folds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_folds</span><span class="p">)</span>
+        <span class="n">e_value</span> <span class="o">=</span> <span class="n">e_value_dml_ci_test</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">betting_folds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">betting_folds</span><span class="p">)</span>
+        
+        <span class="c1"># Convert e-value to p-value. 1/e is a common (though sometimes conservative) choice.</span>
+        <span class="c1"># Ensure p-value is at most 1.</span>
+        <span class="n">p_value</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">e_value</span> <span class="k">if</span> <span class="n">e_value</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pvalue_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">p_value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">p_value</span></div>
+
+
+<span class="n">register_ci_test</span><span class="p">(</span><span class="s2">&quot;edml&quot;</span><span class="p">,</span> <span class="n">EDML</span><span class="p">)</span> 
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Pavel Averin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
