@@ -110,4 +110,8 @@ dmypy.json
 .pyre/
 
 # pytype
-.pytype/ 
+.pytype/
+
+# Files generated during development
+causallearnex.py
+instructions.md 
