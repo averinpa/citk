@@ -79,10 +79,36 @@ class RandomForest(CITKTest):
         
         # Determine if it's a classification or regression task
         is_classification = y_series.nunique() <= 10 or pd.api.types.is_categorical_dtype(y_series.dtype)
-        if is_classification:
-            model = RandomForestClassifier(n_estimators=self.n_estimators, random_state=self.random_state, n_jobs=-1)
-        else:
+        
+        if not condition_names:
+            # --- Unconditional Case: Permutation test on R-squared ---
+            # For the unconditional case, feature importance is always 1.0, which is not a useful metric.
+            # Instead, we test the model's predictive power (R-squared) against a permuted target.
+            if is_classification:
+                raise NotImplementedError("Unconditional classification test with RF is not yet implemented.")
+            
             model = RandomForestRegressor(n_estimators=self.n_estimators, random_state=self.random_state, n_jobs=-1)
+            
+            # 1. Observed R-squared
+            model.fit(X_df, y_series)
+            observed_r2 = model.score(X_df, y_series)
+            
+            # 2. Null distribution of R-squared from permuted target
+            permuted_r2 = np.zeros(self.num_permutations)
+            y_permuted_np = y_series.to_numpy()
+            for i in range(self.num_permutations):
+                np.random.shuffle(y_permuted_np)
+                model.fit(X_df, y_permuted_np)
+                permuted_r2[i] = model.score(X_df, y_permuted_np)
+                
+            p_value = (np.sum(permuted_r2 >= observed_r2) + 1) / (self.num_permutations + 1)
+
+        else:
+            # --- Conditional Case: Permutation test on feature importance ---
+            if is_classification:
+                model = RandomForestClassifier(n_estimators=self.n_estimators, random_state=self.random_state, n_jobs=-1)
+            else:
+                model = RandomForestRegressor(n_estimators=self.n_estimators, random_state=self.random_state, n_jobs=-1)
 
         # 1. Calculate the observed statistic
         model.fit(X_df, y_series)
@@ -139,12 +165,14 @@ def get_dml_residuals(data, x_idx, y_idx, z_idx, cv_folds=5):
     return U, V
 
 def dcor_test(x, y, n_perms=499):
-    """The final-stage p-value test based on distance correlation."""
-    obs_stat = dcor.distance_correlation(x, y)
-    y_shuffled = y.copy()
-    perm_stats = [dcor.distance_correlation(x, np.random.permutation(y_shuffled)) for _ in range(n_perms)]
-    count = np.sum(np.array(perm_stats) >= obs_stat)
-    return (count + 1) / (n_perms + 1)
+    """
+    The final-stage p-value test based on distance correlation.
+    Uses the dcor library's built-in permutation test for robustness.
+    """
+    # Using the library's built-in permutation test is more robust
+    # than a manual implementation.
+    result = dcor.independence.distance_covariance_test(x, y, num_resamples=n_perms)
+    return result.p_value
 
 def conformalized_ci_test(data, x_idx, y_idx, z_idx, alpha=0.1, cv_folds=5, n_perms=199):
     """Performs the Conformalized Residual Independence Test (CRIT)."""

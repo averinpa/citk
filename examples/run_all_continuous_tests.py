@@ -1,0 +1,93 @@
+"""
+This script provides a comprehensive demonstration of all continuous
+conditional independence tests available in the `citk` library.
+
+It uses a simple causal chain structure (A -> B -> C) to showcase
+how each test evaluates a dependent relationship and a conditionally
+independent relationship.
+
+- The test `A _||_ C` should be rejected (Dependent).
+- The test `A _||_ C | B` should not be rejected (Independent).
+
+This script first runs the tests on a dataset with a weak signal and
+low sample size, where some ML-tests may struggle. It then runs them
+on a dataset with a stronger signal and larger sample size to show
+how they perform under more ideal conditions.
+"""
+import numpy as np
+import os
+
+# Import all the test classes
+from citk.tests.simple_tests import FisherZ, Spearman, DCor
+from citk.tests.statistical_model_tests import Regression
+from citk.tests.ml_based_tests import KCI, RandomForest, DML, CRIT, EDML
+
+def run_tests_on_dataset(data, dataset_name):
+    """Helper function to run all tests on a given dataset."""
+    print("\n" + "="*60)
+    print(f"Running All Continuous CI Tests on: {dataset_name}")
+    print(f"Data shape: {data.shape}")
+    print("="*60)
+
+    # Define the list of all continuous tests to run
+    # Parameters have been increased for more robust results
+    all_continuous_tests = [
+        (FisherZ, "Fisher's Z", {}, True),
+        (Spearman, "Spearman's Rho", {}, True),
+        (DCor, "Distance Correlation", {}, False),
+        (Regression, "Linear Regression (LRT)", {}, True),
+        (KCI, "Kernel CI (KCI)", {}, True),
+        (RandomForest, "Random Forest", {"n_estimators": 100, "num_permutations": 199}, True),
+        (DML, "Double ML (DML)", {"cv_folds": 5, "n_perms": 199}, True),
+        (CRIT, "Conformalized Residuals (CRIT)", {"cv_folds": 5, "n_perms": 199}, True),
+        (EDML, "E-Value DML (EDML)", {"cv_folds": 5, "betting_folds": 2}, True),
+    ]
+
+    for TestClass, test_name, kwargs, supports_conditional in all_continuous_tests:
+        print(f"\n--- Testing: {test_name} ({dataset_name}) ---")
+
+        cache_file = f"examples/cache/{dataset_name}_{test_name.lower().replace(' ', '_')}_cache.json"
+        test_instance = TestClass(data, cache_path=cache_file, **kwargs)
+
+        # Unconditional test
+        p_ac = test_instance(0, 2)
+        print(f"  p-value for A _||_ C: {p_ac:.4f} -> {'Dependent' if p_ac < 0.05 else 'Independent'} (Expected: Dependent)")
+
+        # Conditional test
+        if supports_conditional:
+            p_ac_b = test_instance(0, 2, [1])
+            print(f"  p-value for A _||_ C | B: {p_ac_b:.4f} -> {'Dependent' if p_ac_b < 0.05 else 'Independent'} (Expected: Independent)")
+        else:
+            print("  p-value for A _||_ C | B: Not supported by this test.")
+        
+        test_instance.save_cache()
+
+
+# =================================================================================
+# Section 1: Low Sample Size / Weak Signal Data
+# =================================================================================
+np.random.seed(1)
+A_weak = np.random.randn(200)
+B_weak = 0.8 * A_weak + 0.2 * np.random.randn(200)
+C_weak = 0.8 * B_weak + 0.2 * np.random.randn(200)
+data_weak = np.vstack([A_weak, B_weak, C_weak]).T
+
+# Create a directory for cache files if it doesn't exist
+os.makedirs("examples/cache", exist_ok=True)
+
+run_tests_on_dataset(data_weak, "Weak Signal (n=200)")
+
+# =================================================================================
+# Section 2: High Sample Size / Strong Signal Data
+# =================================================================================
+np.random.seed(1)
+A_strong = np.random.randn(500)
+B_strong = 0.9 * A_strong + 0.1 * np.random.randn(500)
+C_strong = 0.9 * B_strong + 0.1 * np.random.randn(500)
+data_strong = np.vstack([A_strong, B_strong, C_strong]).T
+
+run_tests_on_dataset(data_strong, "Strong Signal (n=500)")
+
+print("\n" + "="*60)
+print("Demonstration complete.")
+print("="*60) 
