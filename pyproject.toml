@@ -11,9 +11,9 @@ authors = [
 description = "A toolkit for robust conditional independence testing in causal discovery."
 readme = "README.md"
 requires-python = ">=3.8"
+license = { text = "MIT License" }
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering",
@@ -21,6 +21,11 @@ classifiers = [
 dependencies = [
     "numpy",
     "scipy",
+    "pandas",
+    "pingouin",
     "causal-learn",
     # Add other dependencies like pandas, scikit-learn as needed
 ]
+
+[tool.setuptools]
+packages = ["citk"]

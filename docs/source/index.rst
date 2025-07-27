@@ -1,20 +1,43 @@
-Welcome to citk's documentation!
-===================================
+.. My Conditional Independence Package documentation master file
 
-`citk` is a Python library that provides a comprehensive toolkit for conditional independence (CI) testing, designed to be seamlessly integrated with the `causal-learn` package. It offers a collection of classical, statistical, and modern machine learning-based CI tests.
+Welcome to the documentation!
+==================================================
+
+This library provides a comprehensive suite of tools for performing
+conditional independence testing. This documentation serves as a practical
+user guide and a research reference for the underlying statistical theory.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: User Guides
 
-   api/simple_tests
-   api/statistical_model_tests
-   api/ml_based_tests
+   guides/installation
+   guides/quickstart
+   guides/choosing_a_test
+   guides/interpreting_results
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Theoretical Foundations
 
-Indices and tables
-==================
+   theory/what_is_ci
+   theory/taxonomy_of_tests
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search` 
+.. toctree::
+   :maxdepth: 2
+   :caption: Conditional Independence Tests
+
+   tests/index.rst
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API Reference
+
+   api/modules
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Development
+
+   contributing
+   changelog 

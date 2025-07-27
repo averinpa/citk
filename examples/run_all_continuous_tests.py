@@ -1,19 +1,3 @@
-"""
-This script provides a comprehensive demonstration of all continuous
-conditional independence tests available in the `citk` library.
-
-It uses a simple causal chain structure (A -> B -> C) to showcase
-how each test evaluates a dependent relationship and a conditionally
-independent relationship.
-
-- The test `A _||_ C` should be rejected (Dependent).
-- The test `A _||_ C | B` should not be rejected (Independent).
-
-This script first runs the tests on a dataset with a weak signal and
-low sample size, where some ML-tests may struggle. It then runs them
-on a dataset with a stronger signal and larger sample size to show
-how they perform under more ideal conditions.
-"""
 import numpy as np
 import os
 
@@ -21,6 +5,7 @@ import os
 from citk.tests.simple_tests import FisherZ, Spearman, DCor
 from citk.tests.statistical_model_tests import Regression
 from citk.tests.ml_based_tests import KCI, RandomForest, DML, CRIT, EDML
+
 
 def run_tests_on_dataset(data, dataset_name):
     """Helper function to run all tests on a given dataset."""
@@ -34,13 +19,13 @@ def run_tests_on_dataset(data, dataset_name):
     all_continuous_tests = [
         (FisherZ, "Fisher's Z", {}, True),
         (Spearman, "Spearman's Rho", {}, True),
-        (DCor, "Distance Correlation", {}, False),
-        (Regression, "Linear Regression (LRT)", {}, True),
-        (KCI, "Kernel CI (KCI)", {}, True),
-        (RandomForest, "Random Forest", {"n_estimators": 100, "num_permutations": 199}, True),
-        (DML, "Double ML (DML)", {"cv_folds": 5, "n_perms": 199}, True),
-        (CRIT, "Conformalized Residuals (CRIT)", {"cv_folds": 5, "n_perms": 199}, True),
-        (EDML, "E-Value DML (EDML)", {"cv_folds": 5, "betting_folds": 2}, True),
+        # (DCor, "Distance Correlation", {}, False),
+        # (Regression, "Linear Regression (LRT)", {}, True),
+        # (KCI, "Kernel CI (KCI)", {}, True),
+        # (RandomForest, "Random Forest", {"n_estimators": 100, "num_permutations": 199}, True),
+        # (DML, "Double ML (DML)", {"cv_folds": 5, "n_perms": 199}, True),
+        # (CRIT, "Conformalized Residuals (CRIT)", {"cv_folds": 5, "n_perms": 199}, True),
+        # (EDML, "E-Value DML (EDML)", {"cv_folds": 5, "betting_folds": 2}, True),
     ]
 
     for TestClass, test_name, kwargs, supports_conditional in all_continuous_tests:

@@ -1,6 +1,5 @@
 import codecs
 import json
-import os
 from causallearn.utils.cit import CIT_Base
 
 class CITKTest(CIT_Base):
@@ -34,6 +33,14 @@ class CITKTest(CIT_Base):
                         fout.write(json.dumps(self.pvalue_cache, indent=2))
             except Exception as e:
                 print(f"Error saving cache for {self.__class__.__name__}: {e}")
+
+    def __del__(self):
+        """
+        When the object is garbage collected, save the cache one last time.
+        This ensures the cache is saved even if the run is shorter than the
+        30-second automatic save interval in the base class.
+        """
+        self.save_cache()
 
     def __call__(self, X, Y, condition_set=None, **kwargs):
         """
