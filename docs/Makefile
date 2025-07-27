@@ -19,7 +19,7 @@ help:
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	@if [ "$@" = "html" ]; then \
-		echo "Moving HTML output to build directory..."; \
-		mv "$(BUILDDIR)/html"/* "$(BUILDDIR)"; \
+		echo "Cleaning up build directory..."; \
+		cp -a "$(BUILDDIR)/html/." "$(BUILDDIR)/"; \
 		rm -rf "$(BUILDDIR)/html" "$(BUILDDIR)/doctrees"; \
 	fi
