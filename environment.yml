@@ -1,0 +1,17 @@
+name: citk-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy<2.3
+  - jupyterlab
+  - ipykernel
+  - pip
+  - sphinx
+  - sphinx_rtd_theme
+  - myst-parser
+  - ipython
+  - lightgbm
+  - dcor
+  - pip:
+    - -e .

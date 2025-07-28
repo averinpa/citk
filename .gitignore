@@ -115,4 +115,12 @@ dmypy.json
 
 # Files generated during development
 causallearnex.py
-instructions.md 
+instructions.md
+
+# Build artifacts and caches
+citk.egg-info/
+/examples/cache/
+/notebooks/examples/cache/
+
+# macOS
+.DS_Store 

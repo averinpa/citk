@@ -1,0 +1,47 @@
+name: "Docs: Build and Deploy"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r docs/requirements.txt
+          pip install -e .
+
+      - name: Build HTML
+        run: |
+          cd docs
+          make clean
+          make html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/build/html
+          # By default, this action cleans the destination directory.
+          # We can add a .nojekyll file to the root of the gh-pages branch
+          # to prevent GitHub Pages from running the static files through Jekyll.
+          # This is important for Sphinx sites.
+          publish_branch: gh-pages
+          force_orphan: true 
