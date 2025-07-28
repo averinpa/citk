@@ -3,8 +3,9 @@ citk.tests package
 
 .. automodule:: citk.tests
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
+   :noindex:
 
 Submodules
 ----------

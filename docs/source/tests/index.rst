@@ -6,8 +6,17 @@ This section provides detailed documentation for each of the conditional indepen
 
 .. toctree::
    :maxdepth: 1
+   :caption: Contents:
 
+   chi_sq_test
+   g_sq_test
    fisher_z_test
    spearman
-   g_sq_test
-   chi_sq_test 
+   logit_test
+   poisson_test
+   regression_test
+   kci_test
+   random_forest_test
+   dml_test
+   crit_test
+   edml_test 
