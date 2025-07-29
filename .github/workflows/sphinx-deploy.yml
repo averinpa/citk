@@ -31,10 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          echo "--- Contents of docs/requirements.txt ---"
-          cat docs/requirements.txt
-          echo "-------------------------------------------"
-          pip install -r docs/requirements.txt
+          pip install -r docs/requirements.txt lightgbm dcor
       - name: Install package
         run: pip install .
       - name: Build with Sphinx
