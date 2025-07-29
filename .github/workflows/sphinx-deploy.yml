@@ -38,13 +38,10 @@ jobs:
           cd docs
           make clean
           make html
-      - name: List files in the build directory for debugging
-        run: ls -R docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire directory
-          path: 'docs/_build/html'
+          path: 'docs/build'
 
   deploy:
     environment:
