@@ -1,0 +1,208 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Choose a Conditional Independence Test &mdash; CITK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Interpreting Test Results" href="interpreting_results.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CITK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to Choose a Conditional Independence Test</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#key-considerations">Key Considerations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#data-type">1. Data Type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relationship-type">2. Relationship Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#summary-table">Summary Table</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="interpreting_results.html">Interpreting Test Results</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theoretical Foundations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/what_is_ci.html">What is Conditional Independence?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/taxonomy_of_tests.html">A Taxonomy of Conditional Independence Tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Conditional Independence Tests</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tests/index.html">Conditional Independence Test Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/citk.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CITK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">How to Choose a Conditional Independence Test</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guides/choosing_a_test.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="how-to-choose-a-conditional-independence-test">
+<h1>How to Choose a Conditional Independence Test<a class="headerlink" href="#how-to-choose-a-conditional-independence-test" title="Link to this heading"></a></h1>
+<p>Choosing the right conditional independence (CI) test is crucial for the validity of your causal discovery or feature selection analysis. The appropriate test depends on the characteristics of your data and the underlying assumptions you are willing to make.</p>
+<section id="key-considerations">
+<h2>Key Considerations<a class="headerlink" href="#key-considerations" title="Link to this heading"></a></h2>
+<p>Here are the primary factors to consider when selecting a test:</p>
+<section id="data-type">
+<h3>1. Data Type<a class="headerlink" href="#data-type" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Continuous Data</strong>: If your variables are all continuous, you have several options:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">fisherz</span></code>: Assumes linear relationships and multivariate normal data. It is very fast but may fail if these assumptions are violated.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spearman</span></code>: A non-parametric alternative that works on ranked data. It is suitable for monotonic (but not necessarily linear) relationships.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kci</span></code>: A kernel-based test that can capture complex, non-linear relationships. It is powerful but computationally more intensive.</p></li>
+</ul>
+</li>
+<li><p><strong>Discrete Data</strong>: If your variables are categorical:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">gsq</span></code> (G-Square) or <code class="docutils literal notranslate"><span class="pre">chisq</span></code> (Chi-Square): Both are classical tests for discrete data based on contingency tables. <code class="docutils literal notranslate"><span class="pre">gsq</span></code> is often preferred for theoretical reasons, especially with smaller sample sizes.</p></li>
+</ul>
+</li>
+<li><p><strong>Mixed Data</strong>: When you have a combination of continuous and discrete variables, you currently need to discretize your continuous data to use tests like <code class="docutils literal notranslate"><span class="pre">gsq</span></code> or <code class="docutils literal notranslate"><span class="pre">chisq</span></code>. Future versions may include dedicated tests for mixed data.</p></li>
+</ul>
+</section>
+<section id="relationship-type">
+<h3>2. Relationship Type<a class="headerlink" href="#relationship-type" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Linear</strong>: If you believe the relationships between your variables are linear, <code class="docutils literal notranslate"><span class="pre">fisherz</span></code> is a computationally efficient choice.</p></li>
+<li><p><strong>Monotonic</strong>: For relationships that are consistently increasing or decreasing but not necessarily linear, <code class="docutils literal notranslate"><span class="pre">spearman</span></code> is a robust option.</p></li>
+<li><p><strong>Non-Linear / Complex</strong>: For arbitrary, complex relationships, machine learning-based tests like <code class="docutils literal notranslate"><span class="pre">kci</span></code> or <code class="docutils literal notranslate"><span class="pre">rf</span></code> are the most powerful and flexible choices, though they come at a higher computational cost.</p></li>
+</ul>
+</section>
+</section>
+<section id="summary-table">
+<h2>Summary Table<a class="headerlink" href="#summary-table" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Test Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Relationship Type</p></th>
+<th class="head"><p>Key Assumption(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fisherz</span></code></p></td>
+<td><p>Continuous</p></td>
+<td><p>Linear</p></td>
+<td><p>Multivariate normality</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spearman</span></code></p></td>
+<td><p>Continuous</p></td>
+<td><p>Monotonic</p></td>
+<td><p>Monotonicity</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gsq</span></code> / <code class="docutils literal notranslate"><span class="pre">chisq</span></code></p></td>
+<td><p>Discrete</p></td>
+<td><p>Any</p></td>
+<td><p>Adequate sample size for contingency table cells</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kci</span></code></p></td>
+<td><p>Continuous</p></td>
+<td><p>Any</p></td>
+<td><p>None (non-parametric)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rf</span></code> / <code class="docutils literal notranslate"><span class="pre">dml</span></code></p></td>
+<td><p>Continuous</p></td>
+<td><p>Any</p></td>
+<td><p>None (non-parametric)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="interpreting_results.html" class="btn btn-neutral float-right" title="Interpreting Test Results" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Pavel Averin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

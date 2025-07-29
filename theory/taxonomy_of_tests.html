@@ -1,0 +1,188 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Taxonomy of Conditional Independence Tests &mdash; CITK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Conditional Independence Test Reference" href="../tests/index.html" />
+    <link rel="prev" title="What is Conditional Independence?" href="what_is_ci.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CITK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/choosing_a_test.html">How to Choose a Conditional Independence Test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/interpreting_results.html">Interpreting Test Results</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theoretical Foundations</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="what_is_ci.html">What is Conditional Independence?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">A Taxonomy of Conditional Independence Tests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#correlation-based-tests">1. Correlation-Based Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contingency-table-based-tests">2. Contingency Table-Based Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#regression-based-tests">3. Regression-Based Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#kernel-based-tests">4. Kernel-Based Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#machine-learning-based-tests">5. Machine Learning-Based Tests</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Conditional Independence Tests</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tests/index.html">Conditional Independence Test Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/citk.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CITK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">A Taxonomy of Conditional Independence Tests</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/theory/taxonomy_of_tests.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="a-taxonomy-of-conditional-independence-tests">
+<h1>A Taxonomy of Conditional Independence Tests<a class="headerlink" href="#a-taxonomy-of-conditional-independence-tests" title="Link to this heading"></a></h1>
+<p>The conditional independence (CI) tests provided in <code class="docutils literal notranslate"><span class="pre">citk</span></code> can be broadly classified into several categories based on their underlying principles. Understanding these categories can help you reason about which test might be most appropriate for your research question and data.</p>
+<section id="correlation-based-tests">
+<h2>1. Correlation-Based Tests<a class="headerlink" href="#correlation-based-tests" title="Link to this heading"></a></h2>
+<p>These tests are based on measures of correlation, typically Pearson correlation for linear relationships or Spearman correlation for monotonic relationships.</p>
+<ul class="simple">
+<li><p><strong>Core Idea</strong>: Test if the partial correlation between two variables is zero after controlling for the conditioning set.</p></li>
+<li><p><strong>Example</strong>: <code class="docutils literal notranslate"><span class="pre">fisherz</span></code>, <code class="docutils literal notranslate"><span class="pre">spearman</span></code></p></li>
+<li><p><strong>Strengths</strong>: Computationally very fast and statistically efficient if the assumptions (e.g., linearity, normality) hold.</p></li>
+<li><p><strong>Weaknesses</strong>: Can fail to detect non-linear or complex dependencies.</p></li>
+</ul>
+</section>
+<section id="contingency-table-based-tests">
+<h2>2. Contingency Table-Based Tests<a class="headerlink" href="#contingency-table-based-tests" title="Link to this heading"></a></h2>
+<p>These are classical statistical tests designed for discrete (categorical) data.</p>
+<ul class="simple">
+<li><p><strong>Core Idea</strong>: Compare the observed cell counts in a contingency table to the counts that would be expected under the null hypothesis of independence.</p></li>
+<li><p><strong>Example</strong>: <code class="docutils literal notranslate"><span class="pre">gsq</span></code> (G-test), <code class="docutils literal notranslate"><span class="pre">chisq</span></code> (Chi-Square)</p></li>
+<li><p><strong>Strengths</strong>: Well-understood statistical properties and robust for categorical data.</p></li>
+<li><p><strong>Weaknesses</strong>: Requires discrete data. Can suffer from low statistical power if the sample size is small relative to the number of cells in the table.</p></li>
+</ul>
+</section>
+<section id="regression-based-tests">
+<h2>3. Regression-Based Tests<a class="headerlink" href="#regression-based-tests" title="Link to this heading"></a></h2>
+<p>These tests use regression models to check for independence.</p>
+<ul class="simple">
+<li><p><strong>Core Idea</strong>: Regress one variable onto the other variables (including the conditioning set). If the coefficient for the target variable is statistically indistinguishable from zero, it suggests independence.</p></li>
+<li><p><strong>Example</strong>: <code class="docutils literal notranslate"><span class="pre">reg</span></code> (Linear Regression), <code class="docutils literal notranslate"><span class="pre">logit</span></code> (Logistic Regression), <code class="docutils literal notranslate"><span class="pre">pois</span></code> (Poisson Regression)</p></li>
+<li><p><strong>Strengths</strong>: Can be tailored to the specific data generating process (e.g., binary outcomes with <code class="docutils literal notranslate"><span class="pre">logit</span></code>).</p></li>
+<li><p><strong>Weaknesses</strong>: Make strong parametric assumptions about the functional form of the relationship.</p></li>
+</ul>
+</section>
+<section id="kernel-based-tests">
+<h2>4. Kernel-Based Tests<a class="headerlink" href="#kernel-based-tests" title="Link to this heading"></a></h2>
+<p>These are non-parametric tests that operate in a high-dimensional feature space defined by a kernel function.</p>
+<ul class="simple">
+<li><p><strong>Core Idea</strong>: Map the data into a Reproducing Kernel Hilbert Space (RKHS) and test for independence in that space. This allows the detection of complex, non-linear relationships. The Hilbert-Schmidt Independence Criterion (HSIC) is a common measure used.</p></li>
+<li><p><strong>Example</strong>: <code class="docutils literal notranslate"><span class="pre">kci</span></code></p></li>
+<li><p><strong>Strengths</strong>: Can detect any kind of relationship (linear, non-linear, non-monotonic). Does not make strong assumptions about the data distribution.</p></li>
+<li><p><strong>Weaknesses</strong>: Computationally more expensive than simpler tests. The choice of kernel and its parameters can influence the results.</p></li>
+</ul>
+</section>
+<section id="machine-learning-based-tests">
+<h2>5. Machine Learning-Based Tests<a class="headerlink" href="#machine-learning-based-tests" title="Link to this heading"></a></h2>
+<p>This is a modern and flexible category of tests that leverage machine learning models to test for independence.</p>
+<ul class="simple">
+<li><p><strong>Core Idea</strong>: Use a predictive model (like a random forest or gradient boosting) to see if one variable can be predicted from another, given the conditioning set. If the prediction is no better than random chance, it implies independence.</p></li>
+<li><p><strong>Example</strong>: <code class="docutils literal notranslate"><span class="pre">rf</span></code> (Random Forest), <code class="docutils literal notranslate"><span class="pre">dml</span></code> (Double Machine Learning)</p></li>
+<li><p><strong>Strengths</strong>: Highly flexible, can capture very complex relationships, and often make few assumptions.</p></li>
+<li><p><strong>Weaknesses</strong>: Can be computationally very intensive. May require larger sample sizes to work effectively.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="what_is_ci.html" class="btn btn-neutral float-left" title="What is Conditional Independence?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../tests/index.html" class="btn btn-neutral float-right" title="Conditional Independence Test Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Pavel Averin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

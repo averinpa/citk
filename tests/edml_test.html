@@ -1,0 +1,230 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Value Double Machine Learning (EDML) CI Test &mdash; CITK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="../api/modules.html" />
+    <link rel="prev" title="Conformalized Residual Independence Test (CRIT)" href="crit_test.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CITK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/choosing_a_test.html">How to Choose a Conditional Independence Test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/interpreting_results.html">Interpreting Test Results</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theoretical Foundations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/what_is_ci.html">What is Conditional Independence?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/taxonomy_of_tests.html">A Taxonomy of Conditional Independence Tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Conditional Independence Tests</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Conditional Independence Test Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="chi_sq_test.html">Chi-Squared Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="g_sq_test.html">G-Squared Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fisher_z_test.html">Fisher’s Z Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spearman.html">Spearman’s Rho Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logit_test.html">Logistic Regression Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="poisson_test.html">Poisson Regression Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression_test.html">Linear Regression Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kci_test.html">Kernel Conditional Independence (KCI) Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_forest_test.html">Random Forest CI Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dml_test.html">Double Machine Learning (DML) CI Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="crit_test.html">Conformalized Residual Independence Test (CRIT)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">E-Value Double Machine Learning (EDML) CI Test</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mathematical-formulation">Mathematical Formulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#advantages-for-causal-discovery">Advantages for Causal Discovery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#assumptions">Assumptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-example">Code Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API Reference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/citk.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CITK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Conditional Independence Test Reference</a></li>
+      <li class="breadcrumb-item active">E-Value Double Machine Learning (EDML) CI Test</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tests/edml_test.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="e-value-double-machine-learning-edml-ci-test">
+<h1>E-Value Double Machine Learning (EDML) CI Test<a class="headerlink" href="#e-value-double-machine-learning-edml-ci-test" title="Link to this heading"></a></h1>
+<p>The E-Value Double Machine Learning (EDML) test is a modern framework for conditional independence testing that replaces the traditional p-value with an <strong>e-value</strong>. An e-value is a measure of statistical evidence against the null hypothesis that offers several profound advantages, particularly for complex, iterative tasks like causal discovery.</p>
+<section id="mathematical-formulation">
+<h2>Mathematical Formulation<a class="headerlink" href="#mathematical-formulation" title="Link to this heading"></a></h2>
+<p>The EDML test integrates the robust residualization procedure of Double Machine Learning with the modern inference framework of e-values. The process unfolds in two primary stages:</p>
+<ol class="arabic simple">
+<li><p><strong>Nuisance Prediction and Residualization</strong>: This stage is identical to the standard DML procedure (Chernozhukov et al., 2018). The goal is to isolate the parts of <em>X</em> and <em>Y</em> that are not explained by the conditioning set <em>Z</em>.</p>
+<ul class="simple">
+<li><p>Two flexible machine learning models are trained using cross-fitting to predict <em>X</em> from <em>Z</em> and <em>Y</em> from <em>Z</em>.</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(X = f(Z) + U\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(Y = g(Z) + V\)</span></p></li>
+</ul>
+</li>
+<li><p>The resulting residuals, <em>U</em> and <em>V</em>, represent the variation in <em>X</em> and <em>Y</em> that is orthogonal to <em>Z</em>. Under the null hypothesis (<span class="math notranslate nohighlight">\(X \perp Y | Z\)</span>), these residuals should be independent.</p></li>
+</ul>
+</li>
+<li><p><strong>E-Value Calculation from Residuals</strong>: Instead of performing a standard hypothesis test on the residuals to obtain a p-value, EDML constructs an e-value. This is achieved through a sequential betting mechanism, formally known as a <strong>test martingale</strong>.</p>
+<ul class="simple">
+<li><p>A simple predictive model (the “betting strategy,” e.g., Ridge regression) is trained on one portion of the residuals. This model is then used to sequentially “bet” on the relationship in the remaining portion. The final e-value, <em>E</em>, is the product of the outcomes of these sequential bets.</p></li>
+<li><p>An e-value greater than 1 provides evidence against the null hypothesis. By Markov’s inequality, an e-value <em>E</em> can be converted to a p-value that controls the Type I error rate, typically via the simple formula <strong>p = 1/E</strong>. An e-value of 20, for instance, corresponds to a p-value of 0.05.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="advantages-for-causal-discovery">
+<h2>Advantages for Causal Discovery<a class="headerlink" href="#advantages-for-causal-discovery" title="Link to this heading"></a></h2>
+<p>While traditional p-values are standard, their properties can be problematic for causal discovery algorithms (like the PC algorithm) which are highly iterative and adaptive. E-values provide two key advantages in this setting:</p>
+<ol class="arabic simple">
+<li><p><strong>Validity in Adaptive Search Procedures:</strong> Causal discovery algorithms are inherently adaptive; the result of one CI test (e.g., <span class="math notranslate nohighlight">\(X \perp Y\)</span>) determines which test to perform next (e.g., <span class="math notranslate nohighlight">\(X \perp Y | Z\)</span>). The formal guarantees of p-values can be challenged by this sequential, data-dependent process. E-values, constructed as test martingales, are naturally suited for this sequential framework, providing more robust statistical guarantees throughout the adaptive search for a causal graph (Grünwald &amp; Shafer, 2021).</p></li>
+<li><p><strong>Flexible Integration of Evidence:</strong> There is often no single CI test that is best for all scenarios. A researcher may want to combine the results from a fast, linear CI test with a more computationally intensive, non-linear test for the same potential edge. Combining p-values is non-trivial and requires special methods. E-values, however, can be simply multiplied. This allows an algorithm to easily integrate evidence from different test types (or even different datasets) by multiplying their e-values, yielding a single, aggregated measure of evidence for or against an independence.</p></li>
+</ol>
+</section>
+<section id="assumptions">
+<h2>Assumptions<a class="headerlink" href="#assumptions" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Inherits the primary assumption from DML: the machine learning models used for residualization must be flexible enough to consistently estimate the true nuisance functions.</p></li>
+<li><p>The betting mechanism (test martingale) used to generate the e-value must be valid, meaning its expected value is 1 under the null hypothesis.</p></li>
+</ul>
+</section>
+<section id="code-example">
+<h2>Code Example<a class="headerlink" href="#code-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">citk.tests</span><span class="w"> </span><span class="kn">import</span> <span class="n">EDML</span>
+
+<span class="c1"># Generate data with a linear relationship: X -&gt; Z -&gt; Y</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">X</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">Z</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Initialize the test.</span>
+<span class="n">edml_test</span> <span class="o">=</span> <span class="n">EDML</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Test for unconditional independence (should be dependent, p-value should be small)</span>
+<span class="n">p_unconditional</span> <span class="o">=</span> <span class="n">edml_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (unconditional) for X _||_ Y: </span><span class="si">{</span><span class="n">p_unconditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Test for conditional independence given Z (should be independent, p-value should be large)</span>
+<span class="n">p_conditional</span> <span class="o">=</span> <span class="n">edml_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (conditional) for X _||_ Y | Z: </span><span class="si">{</span><span class="n">p_conditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<p>For a full list of parameters, see the API documentation: :class:<code class="docutils literal notranslate"><span class="pre">citk.tests.ml_based_tests.EDML</span></code>.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., &amp; Robins, J. (2018). Double/debiased machine learning for treatment and structural parameters. <em>The Econometrics Journal, 21</em>(1), C1-C68.</p></li>
+<li><p>Grünwald, P., &amp; Shafer, G. (2021). E-Values: A Guide for the Uninitiated. <em>arXiv preprint arXiv:2111.08272</em>.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="crit_test.html" class="btn btn-neutral float-left" title="Conformalized Residual Independence Test (CRIT)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api/modules.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Pavel Averin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

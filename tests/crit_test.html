@@ -1,0 +1,219 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conformalized Residual Independence Test (CRIT) &mdash; CITK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="E-Value Double Machine Learning (EDML) CI Test" href="edml_test.html" />
+    <link rel="prev" title="Double Machine Learning (DML) CI Test" href="dml_test.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CITK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/choosing_a_test.html">How to Choose a Conditional Independence Test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/interpreting_results.html">Interpreting Test Results</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theoretical Foundations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/what_is_ci.html">What is Conditional Independence?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/taxonomy_of_tests.html">A Taxonomy of Conditional Independence Tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Conditional Independence Tests</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Conditional Independence Test Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="chi_sq_test.html">Chi-Squared Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="g_sq_test.html">G-Squared Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fisher_z_test.html">Fisher’s Z Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spearman.html">Spearman’s Rho Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logit_test.html">Logistic Regression Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="poisson_test.html">Poisson Regression Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression_test.html">Linear Regression Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kci_test.html">Kernel Conditional Independence (KCI) Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_forest_test.html">Random Forest CI Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dml_test.html">Double Machine Learning (DML) CI Test</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Conformalized Residual Independence Test (CRIT)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mathematical-formulation">Mathematical Formulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#properties-and-assumptions">Properties and Assumptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-example">Code Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API Reference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="edml_test.html">E-Value Double Machine Learning (EDML) CI Test</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/citk.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CITK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Conditional Independence Test Reference</a></li>
+      <li class="breadcrumb-item active">Conformalized Residual Independence Test (CRIT)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tests/crit_test.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="conformalized-residual-independence-test-crit">
+<h1>Conformalized Residual Independence Test (CRIT)<a class="headerlink" href="#conformalized-residual-independence-test-crit" title="Link to this heading"></a></h1>
+<p>The Conformalized Residual Independence Test (CRIT) is a sophisticated, non-parametric method for conditional independence testing. It enhances the standard residual-based approach by integrating quantile regression with the rigorous statistical guarantees of <strong>conformal prediction</strong>. This combination allows CRIT to produce robust, distribution-free residuals, making the subsequent independence test more reliable, especially in the presence of complex, non-linear relationships and heteroscedastic noise.</p>
+<section id="mathematical-formulation">
+<h2>Mathematical Formulation<a class="headerlink" href="#mathematical-formulation" title="Link to this heading"></a></h2>
+<p>CRIT is built on the principle that if <em>X</em> and <em>Y</em> are independent given <em>Z</em>, then the parts of <em>X</em> and <em>Y</em> that cannot be explained by <em>Z</em> should also be independent. The novelty of CRIT lies in how it rigorously defines and calculates these “unexplained parts” or residuals. The process can be broken down into four main stages:</p>
+<ol class="arabic simple">
+<li><p><strong>Quantile Regression for Prediction Intervals</strong>: Instead of predicting only the conditional mean (e.g., E[<em>Y</em>|<em>Z</em>]), CRIT uses quantile regression to model the conditional distribution more fully. For a chosen significance level α (e.g., α=0.1), two models are trained to predict the conditional lower and upper quantiles of <em>Y</em> given <em>Z</em>.</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\hat{q}_{\alpha/2}(Z) \approx\)</span> the <span class="math notranslate nohighlight">\((\alpha/2)\)</span>-quantile of <span class="math notranslate nohighlight">\(Y\)</span> given <span class="math notranslate nohighlight">\(Z\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{q}_{1-\alpha/2}(Z) \approx\)</span> the <span class="math notranslate nohighlight">\((1-\alpha/2)\)</span>-quantile of <span class="math notranslate nohighlight">\(Y\)</span> given <span class="math notranslate nohighlight">\(Z\)</span>
+These two quantile functions define an initial prediction interval <span class="math notranslate nohighlight">\([\hat{q}_{\alpha/2}(Z), \hat{q}_{1-\alpha/2}(Z)]\)</span> that is intended to contain the true value of <em>Y</em> with a probability of 1-α. The same procedure is applied to predict an interval for <em>X</em> given <em>Z</em>.</p></li>
+</ul>
+</li>
+<li><p><strong>Conformalization for Valid Coverage</strong>: A key issue with standard prediction intervals is that their actual coverage rate may not match the desired rate (1-α) if the quantile regression models are misspecified. Conformal prediction is a technique that corrects these intervals to provide a mathematically guaranteed coverage rate (Vovk et al., 2005). Using a separate calibration dataset, a non-conformity score is calculated for each point, typically measuring how far the true value lies outside its predicted interval. These scores are then used to adjust the width of the prediction intervals for new data, ensuring they achieve the desired coverage in the long run.</p></li>
+<li><p><strong>Residual Calculation</strong>: CRIT introduces a novel way of calculating residuals. Once a calibrated prediction interval is obtained for an observation <em>y</em>, its residual is not its distance from the mean, but its relative position within this interval. The residual, <em>R<sub>Y</sub></em>, is defined as:
+$<span class="math notranslate nohighlight">\(
+R_Y = \frac{y - \hat{c}(Z)}{\hat{s}(Z)}
+\)</span><span class="math notranslate nohighlight">\(
+where \)</span>\hat{c}(Z)<span class="math notranslate nohighlight">\( is the center of the calibrated interval and \)</span>\hat{s}(Z)$ is its width. This calculation effectively transforms the original variable into a new one whose values are standardized based on the conditional distribution given <em>Z</em>. A similar residual, <em>R<sub>X</sub></em>, is calculated for <em>X</em>.</p></li>
+<li><p><strong>Final Independence Test</strong>: After obtaining the conformalized residuals <em>R<sub>X</sub></em> and <em>R<sub>Y</sub></em>, the final step is to test whether they are unconditionally independent. The null hypothesis of the original test (<span class="math notranslate nohighlight">\(X \perp Y | Z\)</span>) is now translated into a simpler null hypothesis (<span class="math notranslate nohighlight">\(R_X \perp R_Y\)</span>). This implementation performs a <strong>distance correlation</strong> test on these residuals (Székely et al., 2007). Distance correlation is a powerful non-parametric measure that is zero if and only if the variables are independent.</p></li>
+</ol>
+</section>
+<section id="properties-and-assumptions">
+<h2>Properties and Assumptions<a class="headerlink" href="#properties-and-assumptions" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Distribution-Free</strong>: Thanks to the guarantees of conformal prediction, the resulting test is valid (i.e., controls the Type I error rate) without requiring strong assumptions about the data’s distribution.</p></li>
+<li><p><strong>Robustness</strong>: The method is robust to heteroscedasticity (non-constant variance of errors) and misspecification of the underlying regression models used to predict the quantiles.</p></li>
+<li><p><strong>Assumptions</strong>: The primary assumption is that the quantile regression models are reasonably well-specified to capture the conditional distributions. The performance depends on the quality of these base models. The data is also assumed to be exchangeable.</p></li>
+</ul>
+</section>
+<section id="code-example">
+<h2>Code Example<a class="headerlink" href="#code-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">citk.tests</span><span class="w"> </span><span class="kn">import</span> <span class="n">CRIT</span>
+
+<span class="c1"># Generate data with a non-linear relationship: X -&gt; Z -&gt; Y</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">X</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.2</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">Z</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.2</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Initialize the test</span>
+<span class="n">crit_test</span> <span class="o">=</span> <span class="n">CRIT</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">n_perms</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
+
+<span class="c1"># Test for unconditional independence (should be dependent)</span>
+<span class="n">p_unconditional</span> <span class="o">=</span> <span class="n">crit_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (unconditional) for X _||_ Y: </span><span class="si">{</span><span class="n">p_unconditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Test for conditional independence given Z (should be independent)</span>
+<span class="n">p_conditional</span> <span class="o">=</span> <span class="n">crit_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (conditional) for X _||_ Y | Z: </span><span class="si">{</span><span class="n">p_conditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<p>For a full list of parameters, see the API documentation: :class:<code class="docutils literal notranslate"><span class="pre">citk.tests.ml_based_tests.CRIT</span></code>.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Székely, G. J., Rizzo, M. L., &amp; Bakirov, N. K. (2007). Measuring and testing dependence by correlation of distances. <em>The Annals of Statistics, 35</em>(6), 2769-2794.</p></li>
+<li><p>Vovk, V., Gammerman, A., &amp; Shafer, G. (2005). Algorithmic learning in a random world. <em>Springer Science &amp; Business Media</em>.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dml_test.html" class="btn btn-neutral float-left" title="Double Machine Learning (DML) CI Test" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="edml_test.html" class="btn btn-neutral float-right" title="E-Value Double Machine Learning (EDML) CI Test" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Pavel Averin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

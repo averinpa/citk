@@ -1,0 +1,488 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>citk.tests package &mdash; CITK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CITK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/choosing_a_test.html">How to Choose a Conditional Independence Test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/interpreting_results.html">Interpreting Test Results</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theoretical Foundations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/what_is_ci.html">What is Conditional Independence?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/taxonomy_of_tests.html">A Taxonomy of Conditional Independence Tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Conditional Independence Tests</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tests/index.html">Conditional Independence Test Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="citk.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CITK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">citk.tests package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/citk.tests.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="citk-tests-package">
+<span id="citk-tests"></span><h1>citk.tests package<a class="headerlink" href="#citk-tests-package" title="Link to this heading"></a></h1>
+<p>This package contains the implementations of various conditional independence tests.</p>
+<section id="statistical-model-based-tests">
+<h2>Statistical Model-Based Tests<a class="headerlink" href="#statistical-model-based-tests" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="citk.tests.statistical_model_tests.Regression">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.statistical_model_tests.</span></span><span class="sig-name descname"><span class="pre">Regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#citk.tests.statistical_model_tests.Regression" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="citk.tests.base.html#citk.tests.base.CITKTest" title="citk.tests.base.CITKTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></a></p>
+<p>CI test for continuous targets using Linear Regression (OLS).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="citk.tests.statistical_model_tests.Regression.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition_set</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#citk.tests.statistical_model_tests.Regression.__call__" title="Link to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Performs a conditional independence test for continuous data using a likelihood-ratio test
+between nested Ordinary Least Squares (OLS) linear regression models.</p>
+<dl class="simple">
+<dt>X<span class="classifier">int</span></dt><dd><p>The index of the first variable.</p>
+</dd>
+<dt>Y<span class="classifier">int</span></dt><dd><p>The index of the second variable (the target).</p>
+</dd>
+<dt>condition_set<span class="classifier">list[int], optional</span></dt><dd><p>A list of indices for the conditioning set. Can be empty.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>p_value<span class="classifier">float</span></dt><dd><p>The p-value of the test.</p>
+</dd>
+</dl>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For a detailed explanation of the statistical test, including mathematical
+formulations and assumptions, please refer to the <a class="reference internal" href="../tests/regression_test.html"><span class="doc">Linear Regression Test</span></a> guide.</p>
+</div>
+<p class="rubric">Examples</p>
+<p><strong>Standalone Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">citk.tests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Regression</span>
+
+<span class="c1"># Generate data where X and Y are independent given Z</span>
+<span class="c1"># X -&gt; Z -&gt; Y</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">X</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">Z</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Initialize the test</span>
+<span class="n">regression_test</span> <span class="o">=</span> <span class="n">Regression</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Test if X and Y are independent</span>
+<span class="n">p_value_unconditional</span> <span class="o">=</span> <span class="n">regression_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (unconditional) for X _||_ Y: </span><span class="si">{</span><span class="n">p_value_unconditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Test if X and Y are independent given Z</span>
+<span class="n">p_value_conditional</span> <span class="o">=</span> <span class="n">regression_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (conditional) for X _||_ Y | Z: </span><span class="si">{</span><span class="n">p_value_conditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>P-value (unconditional) for X _||_ Y: 0.0000
+P-value (conditional) for X _||_ Y | Z: 0.6210
+</pre></div>
+</div>
+<p><strong>Usage with PC Algorithm</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causallearn.search.ConstraintBased.PC</span><span class="w"> </span><span class="kn">import</span> <span class="n">pc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">citk.tests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Regression</span> <span class="c1"># Make sure it&#39;s registered</span>
+
+<span class="c1"># Re-use the same data from the standalone example</span>
+<span class="n">cg</span> <span class="o">=</span> <span class="n">pc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">indep_test</span><span class="o">=</span><span class="s1">&#39;reg&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Estimated Causal Graph:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cg</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimated Causal Graph:
+Graph Nodes:
+X1;X2;X3
+
+Graph Edges:
+1. X1 --- X3
+2. X2 --- X3
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="citk.tests.statistical_model_tests.Logit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.statistical_model_tests.</span></span><span class="sig-name descname"><span class="pre">Logit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#citk.tests.statistical_model_tests.Logit" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="citk.tests.base.html#citk.tests.base.CITKTest" title="citk.tests.base.CITKTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></a></p>
+<p>CI test for binary targets using Logistic Regression.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="citk.tests.statistical_model_tests.Logit.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition_set</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#citk.tests.statistical_model_tests.Logit.__call__" title="Link to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Performs a conditional independence test for binary data using a likelihood-ratio test
+between nested Logistic Regression models.</p>
+<dl class="simple">
+<dt>X<span class="classifier">int</span></dt><dd><p>The index of the first variable.</p>
+</dd>
+<dt>Y<span class="classifier">int</span></dt><dd><p>The index of the second variable (the binary target).</p>
+</dd>
+<dt>condition_set<span class="classifier">list[int], optional</span></dt><dd><p>A list of indices for the conditioning set. Can be empty.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>p_value<span class="classifier">float</span></dt><dd><p>The p-value of the test.</p>
+</dd>
+</dl>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For a detailed explanation of the statistical test, including mathematical
+formulations and assumptions, please refer to the <a class="reference internal" href="../tests/logit_test.html"><span class="doc">Logistic Regression Test</span></a> guide.</p>
+</div>
+<p class="rubric">Examples</p>
+<p><strong>Standalone Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">citk.tests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logit</span>
+
+<span class="c1"># Generate data where Y is a binary variable</span>
+<span class="c1"># X -&gt; Z -&gt; Y</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">X</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">Z</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Initialize the test</span>
+<span class="n">logit_test</span> <span class="o">=</span> <span class="n">Logit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Test if X and Y are independent</span>
+<span class="n">p_value_unconditional</span> <span class="o">=</span> <span class="n">logit_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (unconditional) for X _||_ Y: </span><span class="si">{</span><span class="n">p_value_unconditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Test for conditional independence of X and Y given Z</span>
+<span class="n">p_value_conditional</span> <span class="o">=</span> <span class="n">logit_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (conditional) for X _||_ Y | Z: </span><span class="si">{</span><span class="n">p_value_conditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>P-value (unconditional) for X _||_ Y: 0.0000
+P-value (conditional) for X _||_ Y | Z: 0.9388
+</pre></div>
+</div>
+<p><strong>Usage with PC Algorithm</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causallearn.search.ConstraintBased.PC</span><span class="w"> </span><span class="kn">import</span> <span class="n">pc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">citk.tests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># For the PC algorithm example, we use fully binary data to ensure</span>
+<span class="c1"># the Logit test is always applicable, as PC may test any variable pair.</span>
+<span class="c1"># We model a causal chain X -&gt; Z -&gt; Y with some noise.</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="c1"># Z depends on X, with a 10% chance of flipping</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">flip_mask_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.1</span>
+<span class="n">Z</span><span class="p">[</span><span class="n">flip_mask_z</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Z</span><span class="p">[</span><span class="n">flip_mask_z</span><span class="p">]</span>
+<span class="c1"># Y depends on Z, with a 10% chance of flipping</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">flip_mask_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.1</span>
+<span class="n">Y</span><span class="p">[</span><span class="n">flip_mask_y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Y</span><span class="p">[</span><span class="n">flip_mask_y</span><span class="p">]</span>
+<span class="n">binary_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="n">cg</span> <span class="o">=</span> <span class="n">pc</span><span class="p">(</span><span class="n">binary_data</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">indep_test</span><span class="o">=</span><span class="s1">&#39;logit&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Estimated Causal Graph:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cg</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimated Causal Graph:
+Graph Nodes:
+X1;X2;X3
+
+Graph Edges:
+1. X1 --- X3
+2. X2 --- X3
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="citk.tests.statistical_model_tests.Poisson">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.statistical_model_tests.</span></span><span class="sig-name descname"><span class="pre">Poisson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#citk.tests.statistical_model_tests.Poisson" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="citk.tests.base.html#citk.tests.base.CITKTest" title="citk.tests.base.CITKTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></a></p>
+<p>CI test for count targets using Poisson Regression.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="citk.tests.statistical_model_tests.Poisson.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition_set</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#citk.tests.statistical_model_tests.Poisson.__call__" title="Link to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Performs a conditional independence test for count data using a likelihood-ratio test
+between nested Poisson Regression models.</p>
+<dl class="simple">
+<dt>X<span class="classifier">int</span></dt><dd><p>The index of the first variable.</p>
+</dd>
+<dt>Y<span class="classifier">int</span></dt><dd><p>The index of the second variable (the count target).</p>
+</dd>
+<dt>condition_set<span class="classifier">list[int], optional</span></dt><dd><p>A list of indices for the conditioning set. Can be empty.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>p_value<span class="classifier">float</span></dt><dd><p>The p-value of the test.</p>
+</dd>
+</dl>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For a detailed explanation of the statistical test, including mathematical
+formulations and assumptions, please refer to the <a class="reference internal" href="../tests/poisson_test.html"><span class="doc">Poisson Regression Test</span></a> guide.</p>
+</div>
+<p class="rubric">Examples</p>
+<p><strong>Standalone Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">citk.tests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Poisson</span>
+
+<span class="c1"># Generate data where Y is a count variable</span>
+<span class="c1"># X -&gt; Z -&gt; Y</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">X</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Z</span><span class="p">))</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Initialize the test</span>
+<span class="n">poisson_test</span> <span class="o">=</span> <span class="n">Poisson</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Test if X and Y are independent</span>
+<span class="n">p_value_unconditional</span> <span class="o">=</span> <span class="n">poisson_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (unconditional) for X _||_ Y: </span><span class="si">{</span><span class="n">p_value_unconditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Test for conditional independence of X and Y given Z</span>
+<span class="n">p_value_conditional</span> <span class="o">=</span> <span class="n">poisson_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (conditional) for X _||_ Y | Z: </span><span class="si">{</span><span class="n">p_value_conditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>P-value (unconditional) for X _||_ Y: 0.0000
+P-value (conditional) for X _||_ Y | Z: 0.2017
+</pre></div>
+</div>
+<p><strong>Usage with PC Algorithm</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causallearn.search.ConstraintBased.PC</span><span class="w"> </span><span class="kn">import</span> <span class="n">pc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">citk.tests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Poisson</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># For the PC algorithm example, we use fully count-based data to</span>
+<span class="c1"># ensure the Poisson test is always applicable.</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">X</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">Z</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">count_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="n">cg</span> <span class="o">=</span> <span class="n">pc</span><span class="p">(</span><span class="n">count_data</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">indep_test</span><span class="o">=</span><span class="s1">&#39;pois&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Estimated Causal Graph:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cg</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimated Causal Graph:
+Graph Nodes:
+X1;X2;X3
+
+Graph Edges:
+1. X1 --- X3
+2. X2 --- X3
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="machine-learning-based-tests">
+<h2>Machine Learning-Based Tests<a class="headerlink" href="#machine-learning-based-tests" title="Link to this heading"></a></h2>
+</section>
+<section id="simple-correlation-based-tests">
+<h2>Simple Correlation-Based Tests<a class="headerlink" href="#simple-correlation-based-tests" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="citk.tests.simple_tests.Spearman">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">citk.tests.simple_tests.</span></span><span class="sig-name descname"><span class="pre">Spearman</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#citk.tests.simple_tests.Spearman" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="citk.tests.base.html#citk.tests.base.CITKTest" title="citk.tests.base.CITKTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">CITKTest</span></code></a></p>
+<p>This class is a wrapper around the <cite>fisherz</cite> test from the <cite>causal-learn</cite> library on ranked data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>np.ndarray</em>) – The dataset from which to run the test.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="citk.tests.simple_tests.Spearman.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition_set</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#citk.tests.simple_tests.Spearman.__call__" title="Link to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Performs a Spearman partial correlation conditional independence test.</p>
+<dl class="simple">
+<dt>X<span class="classifier">int</span></dt><dd><p>The index of the first variable.</p>
+</dd>
+<dt>Y<span class="classifier">int</span></dt><dd><p>The index of the second variable.</p>
+</dd>
+<dt>condition_set<span class="classifier">list[int], optional</span></dt><dd><p>A list of indices for the conditioning set. Can be empty.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>p_value<span class="classifier">float</span></dt><dd><p>The p-value of the test.</p>
+</dd>
+</dl>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For a detailed explanation of the statistical test, including mathematical
+formulations and assumptions, please refer to the <a class="reference internal" href="../tests/spearman.html"><span class="doc">Spearman’s Rho Test</span></a> guide.</p>
+<p><strong>Standalone Usage</strong></p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">citk.tests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spearman</span>
+
+<span class="c1"># Generate data with a non-linear, monotonic relationship</span>
+<span class="c1"># X -&gt; Z -&gt; Y, where the relationships are not linear</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="mi">5</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">X</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Initialize the test</span>
+<span class="n">spearman_test</span> <span class="o">=</span> <span class="n">Spearman</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Test if X and Y are independent</span>
+<span class="n">p_value_unconditional</span> <span class="o">=</span> <span class="n">spearman_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (unconditional) for X _||_ Y: </span><span class="si">{</span><span class="n">p_value_unconditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Test if X and Y are independent given Z</span>
+<span class="n">p_value_conditional</span> <span class="o">=</span> <span class="n">spearman_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (conditional) for X _||_ Y | Z: </span><span class="si">{</span><span class="n">p_value_conditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>P-value (unconditional) for X _||_ Y: 0.0000
+P-value (conditional) for X _||_ Y | Z: 0.4640
+</pre></div>
+</div>
+<p><strong>Usage with PC Algorithm</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causallearn.search.ConstraintBased.PC</span><span class="w"> </span><span class="kn">import</span> <span class="n">pc</span>
+
+<span class="c1"># The same data from the standalone example</span>
+<span class="n">cg</span> <span class="o">=</span> <span class="n">pc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">indep_test</span><span class="o">=</span><span class="s1">&#39;spearman&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Estimated Causal Graph:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cg</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimated Causal Graph:
+Graph Nodes:
+X1;X2;X3
+
+Graph Edges:
+1. X1 --- X3
+2. X2 --- X3
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Pavel Averin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,223 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Forest CI Test &mdash; CITK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Double Machine Learning (DML) CI Test" href="dml_test.html" />
+    <link rel="prev" title="Kernel Conditional Independence (KCI) Test" href="kci_test.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CITK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/choosing_a_test.html">How to Choose a Conditional Independence Test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/interpreting_results.html">Interpreting Test Results</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theoretical Foundations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/what_is_ci.html">What is Conditional Independence?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/taxonomy_of_tests.html">A Taxonomy of Conditional Independence Tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Conditional Independence Tests</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Conditional Independence Test Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="chi_sq_test.html">Chi-Squared Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="g_sq_test.html">G-Squared Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fisher_z_test.html">Fisher’s Z Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spearman.html">Spearman’s Rho Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logit_test.html">Logistic Regression Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="poisson_test.html">Poisson Regression Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression_test.html">Linear Regression Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kci_test.html">Kernel Conditional Independence (KCI) Test</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Random Forest CI Test</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mathematical-formulation">Mathematical Formulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#properties-and-assumptions">Properties and Assumptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-example">Code Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API Reference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dml_test.html">Double Machine Learning (DML) CI Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="crit_test.html">Conformalized Residual Independence Test (CRIT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="edml_test.html">E-Value Double Machine Learning (EDML) CI Test</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/citk.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CITK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Conditional Independence Test Reference</a></li>
+      <li class="breadcrumb-item active">Random Forest CI Test</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tests/random_forest_test.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="random-forest-ci-test">
+<h1>Random Forest CI Test<a class="headerlink" href="#random-forest-ci-test" title="Link to this heading"></a></h1>
+<p>The Random Forest Conditional Independence (CI) test is a flexible, non-parametric method that leverages the predictive power of ensemble models to assess conditional independence. By measuring the importance of a feature in a predictive task, it can capture complex, non-linear relationships and interactions, making it well-suited for a wide range of data types.</p>
+<section id="mathematical-formulation">
+<h2>Mathematical Formulation<a class="headerlink" href="#mathematical-formulation" title="Link to this heading"></a></h2>
+<p>The test is based on a simple but powerful premise: if a variable <em>X</em> is conditionally independent of a target <em>Y</em> given a set of conditioning variables <em>Z</em>, then <em>X</em> should have no predictive power for <em>Y</em> when the information in <em>Z</em> is already available. The test formalizes this idea by measuring the feature importance of <em>X</em> within a Random Forest model trained to predict <em>Y</em>.</p>
+<p>The most robust measure of feature importance for this task is <strong>permutation importance</strong> (Breiman, 2001; Fisher et al., 2019). The overall procedure to obtain a p-value is as follows:</p>
+<ol class="arabic simple">
+<li><p><strong>Train a Predictive Model</strong>: A Random Forest model is trained to predict the target variable <code class="docutils literal notranslate"><span class="pre">Y</span></code> using the predictor <code class="docutils literal notranslate"><span class="pre">X</span></code> and the conditioning set <code class="docutils literal notranslate"><span class="pre">Z</span></code> as features.</p></li>
+<li><p><strong>Calculate Observed Importance</strong>: The permutation importance of <code class="docutils literal notranslate"><span class="pre">X</span></code> is calculated. This is done by first recording the model’s performance (e.g., R² for regression, accuracy for classification) on a hold-out dataset. Then, the values in the column corresponding to feature <code class="docutils literal notranslate"><span class="pre">X</span></code> are randomly shuffled (permuted), and the model’s performance is measured again. The feature importance is the drop in performance caused by this shuffling. This serves as the <strong>observed test statistic</strong>.
+$<span class="math notranslate nohighlight">\(
+\text{Importance}(X) = \text{Performance}_{\text{original}} - \text{Performance}_{\text{permuted}(X)}
+\)</span>$</p></li>
+<li><p><strong>Generate a Null Distribution</strong>: To determine if the observed importance is statistically significant, we need to generate a distribution of importances under the null hypothesis (<span class="math notranslate nohighlight">\(Y \perp X | Z\)</span>). This is achieved by permuting the relationship between <em>X</em> and <em>Y</em> while preserving the relationship with <em>Z</em>. Specifically, for a number of repetitions:</p>
+<ul class="simple">
+<li><p>The values of feature <code class="docutils literal notranslate"><span class="pre">X</span></code> are permuted.</p></li>
+<li><p>A <em>new</em> Random Forest is trained from scratch on this permuted dataset (predicting <code class="docutils literal notranslate"><span class="pre">Y</span></code> from the permuted <code class="docutils literal notranslate"><span class="pre">X</span></code> and original <code class="docutils literal notranslate"><span class="pre">Z</span></code>).</p></li>
+<li><p>The permutation importance of the (permuted) <code class="docutils literal notranslate"><span class="pre">X</span></code> is calculated for this new model.</p></li>
+<li><p>This collection of importance scores forms the <strong>null distribution</strong>.</p></li>
+</ul>
+</li>
+<li><p><strong>Calculate P-Value</strong>: The p-value is the proportion of importance scores in the null distribution that are greater than or equal to the originally observed importance statistic.</p></li>
+</ol>
+</section>
+<section id="properties-and-assumptions">
+<h2>Properties and Assumptions<a class="headerlink" href="#properties-and-assumptions" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Non-parametric</strong>: The test does not rely on assumptions of linearity or specific data distributions.</p></li>
+<li><p><strong>Handles Interactions and Mixed Data</strong>: Random Forests naturally handle interaction effects between variables and can be used with a mix of continuous and categorical data types.</p></li>
+<li><p><strong>Model-Agnostic Principle</strong>: While this implementation uses Random Forest, the underlying permutation-based testing framework is model-agnostic and can be applied with other predictive models (Fisher et al., 2019).</p></li>
+<li><p><strong>Assumptions</strong>: The primary assumption is that the Random Forest model is a sufficiently good predictor of the underlying relationships. If the model fails to capture the predictive patterns, the feature importance measures will not be reliable.</p></li>
+</ul>
+</section>
+<section id="code-example">
+<h2>Code Example<a class="headerlink" href="#code-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">citk.tests</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForest</span>
+
+<span class="c1"># Generate data with a non-linear relationship: X -&gt; Z -&gt; Y</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">X</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.2</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">Z</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.2</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Initialize the test</span>
+<span class="c1"># num_permutations can be increased for more precise p-values</span>
+<span class="n">rf_test</span> <span class="o">=</span> <span class="n">RandomForest</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">num_permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Test for unconditional independence (should be dependent)</span>
+<span class="n">p_unconditional</span> <span class="o">=</span> <span class="n">rf_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (unconditional) for X _||_ Y: </span><span class="si">{</span><span class="n">p_unconditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Test for conditional independence given Z (should be independent)</span>
+<span class="n">p_conditional</span> <span class="o">=</span> <span class="n">rf_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value (conditional) for X _||_ Y | Z: </span><span class="si">{</span><span class="n">p_conditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<p>For a full list of parameters, see the API documentation: :class:<code class="docutils literal notranslate"><span class="pre">citk.tests.ml_based_tests.RandomForest</span></code>.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Breiman, L. (2001). Random Forests. <em>Machine Learning, 45</em>(1), 5-32.</p></li>
+<li><p>Fisher, A., Rudin, C., &amp; Dominici, F. (2019). All Models are Wrong, but Many are Useful: Learning a Variable’s Importance by Studying an Entire Class of Prediction Models. <em>Journal of Machine Learning Research, 20</em>(177), 1-81.</p></li>
+<li><p>Strobl, C., Boulesteix, A. L., Kneib, T., Augustin, T., &amp; Zeileis, A. (2008). Conditional variable importance for random forests. <em>BMC Bioinformatics, 9</em>(1), 307.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="kci_test.html" class="btn btn-neutral float-left" title="Kernel Conditional Independence (KCI) Test" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dml_test.html" class="btn btn-neutral float-right" title="Double Machine Learning (DML) CI Test" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Pavel Averin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

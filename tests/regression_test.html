@@ -1,0 +1,232 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Linear Regression Test &mdash; CITK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kernel Conditional Independence (KCI) Test" href="kci_test.html" />
+    <link rel="prev" title="Poisson Regression Test" href="poisson_test.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CITK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/choosing_a_test.html">How to Choose a Conditional Independence Test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/interpreting_results.html">Interpreting Test Results</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theoretical Foundations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/what_is_ci.html">What is Conditional Independence?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/taxonomy_of_tests.html">A Taxonomy of Conditional Independence Tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Conditional Independence Tests</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Conditional Independence Test Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="chi_sq_test.html">Chi-Squared Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="g_sq_test.html">G-Squared Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fisher_z_test.html">Fisher’s Z Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spearman.html">Spearman’s Rho Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logit_test.html">Logistic Regression Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="poisson_test.html">Poisson Regression Test</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Linear Regression Test</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mathematical-formulation">Mathematical Formulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#assumptions">Assumptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-example">Code Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API Reference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="kci_test.html">Kernel Conditional Independence (KCI) Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_forest_test.html">Random Forest CI Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dml_test.html">Double Machine Learning (DML) CI Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="crit_test.html">Conformalized Residual Independence Test (CRIT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="edml_test.html">E-Value Double Machine Learning (EDML) CI Test</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/citk.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CITK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Conditional Independence Test Reference</a></li>
+      <li class="breadcrumb-item active">Linear Regression Test</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tests/regression_test.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="linear-regression-test">
+<h1>Linear Regression Test<a class="headerlink" href="#linear-regression-test" title="Link to this heading"></a></h1>
+<p>The Linear Regression test is a conditional independence test for continuous data. In the context of feature selection, it determines whether a variable of interest, <em>X</em>, is independent of a target variable, <em>Y</em>, given a set of conditioning variables, <em>Z</em>. This test is a core component of many modern causal discovery and feature selection algorithms, where it is used to prune statistically irrelevant variables. For instance, the R package <strong><code class="docutils literal notranslate"><span class="pre">MXM</span></code></strong> (Mens eX Machina) implements this test as <code class="docutils literal notranslate"><span class="pre">testIndReg</span></code> for its constraint-based algorithms (Lagani et al., 2017).</p>
+<section id="mathematical-formulation">
+<h2>Mathematical Formulation<a class="headerlink" href="#mathematical-formulation" title="Link to this heading"></a></h2>
+<p>The test evaluates the null hypothesis that <em>X</em> is conditionally independent of <em>Y</em> given <em>Z</em>. This is done by comparing two nested Ordinary Least Squares (OLS) models:</p>
+<ol class="arabic simple">
+<li><p><strong>Restricted Model (Null Hypothesis is true):</strong> This model regresses the target variable <em>Y</em> only on the conditioning set <em>Z</em>.
+$<span class="math notranslate nohighlight">\(
+H_0: Y = \beta_0 + \beta_Z Z + \epsilon
+\)</span>$</p></li>
+<li><p><strong>Unrestricted Model (Alternative Hypothesis is true):</strong> This model regresses <em>Y</em> on both the variable of interest <em>X</em> and the conditioning set <em>Z</em>.
+$<span class="math notranslate nohighlight">\(
+H_A: Y = \beta_0 + \beta_X X + \beta_Z Z + \epsilon
+\)</span>$</p></li>
+</ol>
+<p>The core idea is to assess whether adding <em>X</em> to the model significantly improves its fit to the data. This is most commonly done using an <strong>F-test</strong>, which compares the residual sum of squares (RSS) of the two models (Kutner et al., 2005).</p>
+<p>The F-statistic is calculated as:
+$<span class="math notranslate nohighlight">\(
+F = \frac{(\text{RSS}_{\text{restricted}} - \text{RSS}_{\text{unrestricted}}) / q}{\text{RSS}_{\text{unrestricted}} / (n - k - 1)}
+\)</span>$</p>
+<p>Where:</p>
+<ul class="simple">
+<li><p><strong>RSS<sub>restricted</sub></strong> is the residual sum of squares of the model without <em>X</em>.</p></li>
+<li><p><strong>RSS<sub>unrestricted</sub></strong> is the residual sum of squares of the model with <em>X</em>.</p></li>
+<li><p><strong>q</strong> is the number of parameters being tested (in this simple case, <em>q</em>=1).</p></li>
+<li><p><strong>n</strong> is the number of observations.</p></li>
+<li><p><strong>k</strong> is the number of predictors in the unrestricted model.</p></li>
+</ul>
+<p>Under the null hypothesis, this F-statistic follows an F-distribution with <em>q</em> and <em>(n - k - 1)</em> degrees of freedom. A high F-value (and a correspondingly low p-value) provides evidence to reject the null hypothesis, suggesting that <em>X</em> has a statistically significant linear relationship with <em>Y</em>, even after accounting for <em>Z</em>.</p>
+<p>Alternatively, a <strong>Likelihood Ratio Test (LRT)</strong> can be used, which is the general approach for the GLM-based tests in <code class="docutils literal notranslate"><span class="pre">MXM</span></code>. For OLS with the assumption of normally distributed errors, the LRT is equivalent to the F-test. The test statistic is calculated from the log-likelihood of the models:
+$<span class="math notranslate nohighlight">\(
+T = 2 \cdot (\text{log-likelihood}_{\text{unrestricted}} - \text{log-likelihood}_{\text{restricted}})
+\)</span>$
+According to Wilks’s theorem, this statistic asymptotically follows a Chi-Squared (χ²) distribution with <em>q</em> degrees of freedom under the null hypothesis (Wilks, 1938).</p>
+</section>
+<section id="assumptions">
+<h2>Assumptions<a class="headerlink" href="#assumptions" title="Link to this heading"></a></h2>
+<p>For the F-test and associated p-values to be reliable, several OLS assumptions should be met (Kutner et al., 2005):</p>
+<ul class="simple">
+<li><p><strong>Linearity</strong>: The relationship between the predictors and the target variable is linear.</p></li>
+<li><p><strong>No Perfect Multicollinearity</strong>: The independent variables should not be perfectly correlated.</p></li>
+<li><p><strong>Homoscedasticity</strong>: The variance of the errors is constant for all levels of the predictors.</p></li>
+<li><p><strong>Independence of Errors</strong>: The errors are uncorrelated with each other.</p></li>
+<li><p><strong>Normality of Errors</strong>: For statistical inference in smaller samples, the errors are assumed to follow a normal distribution. While OLS estimates remain unbiased without normality, hypothesis testing relies on this assumption.</p></li>
+</ul>
+</section>
+<section id="code-example">
+<h2>Code Example<a class="headerlink" href="#code-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">citk.tests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Regression</span>
+
+<span class="c1"># Generate data</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">X</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">Z</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Initialize the test</span>
+<span class="n">regression_test</span> <span class="o">=</span> <span class="n">Regression</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Test for conditional independence of X and Y given Z</span>
+<span class="n">p_value</span> <span class="o">=</span> <span class="n">regression_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value for X _||_ Y | Z: </span><span class="si">{</span><span class="n">p_value</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<p>:class:<code class="docutils literal notranslate"><span class="pre">citk.tests.statistical_model_tests.Regression</span></code></p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Kutner, M. H., Nachtsheim, C. J., Neter, J., &amp; Li, W. (2005). <em>Applied Linear Statistical Models</em> (5th ed.). McGraw-Hill Irwin.</p></li>
+<li><p>Lagani, V., Athineou, G., Farcomeni, A., Tsagris, M., &amp; Tsamardinos, I. (2017). Feature Selection with the R Package MXM: Discovering Statistically Equivalent Feature Subsets. <em>Journal of Statistical Software, 80</em>(7), 1-25.</p></li>
+<li><p>Wilks, S. S. (1938). The Large-Sample Distribution of the Likelihood Ratio for Testing Composite Hypotheses. <em>The Annals of Mathematical Statistics, 9</em>(1), 60–62.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="poisson_test.html" class="btn btn-neutral float-left" title="Poisson Regression Test" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="kci_test.html" class="btn btn-neutral float-right" title="Kernel Conditional Independence (KCI) Test" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Pavel Averin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

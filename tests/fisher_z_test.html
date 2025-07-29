@@ -1,0 +1,214 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fisher’s Z Test &mdash; CITK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Spearman’s Rho Test" href="spearman.html" />
+    <link rel="prev" title="G-Squared Test" href="g_sq_test.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CITK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/choosing_a_test.html">How to Choose a Conditional Independence Test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/interpreting_results.html">Interpreting Test Results</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theoretical Foundations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/what_is_ci.html">What is Conditional Independence?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/taxonomy_of_tests.html">A Taxonomy of Conditional Independence Tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Conditional Independence Tests</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Conditional Independence Test Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="chi_sq_test.html">Chi-Squared Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="g_sq_test.html">G-Squared Test</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Fisher’s Z Test</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mathematical-formulation">Mathematical Formulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#assumptions">Assumptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-example">Code Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API Reference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spearman.html">Spearman’s Rho Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logit_test.html">Logistic Regression Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="poisson_test.html">Poisson Regression Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression_test.html">Linear Regression Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kci_test.html">Kernel Conditional Independence (KCI) Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_forest_test.html">Random Forest CI Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dml_test.html">Double Machine Learning (DML) CI Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="crit_test.html">Conformalized Residual Independence Test (CRIT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="edml_test.html">E-Value Double Machine Learning (EDML) CI Test</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/citk.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CITK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Conditional Independence Test Reference</a></li>
+      <li class="breadcrumb-item active">Fisher’s Z Test</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tests/fisher_z_test.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="fisher-s-z-test">
+<h1>Fisher’s Z Test<a class="headerlink" href="#fisher-s-z-test" title="Link to this heading"></a></h1>
+<p>The Fisher’s Z test is a classical conditional independence test for continuous data. It is most powerful under the assumption of linear relationships and serves as a foundational method in statistical and causal discovery applications. Because of its computational efficiency, it remains the default test used in seminal causal discovery methods like the PC algorithm, even in modern high-dimensional settings (Kalisch &amp; Bühlmann, 2007).</p>
+<section id="mathematical-formulation">
+<h2>Mathematical Formulation<a class="headerlink" href="#mathematical-formulation" title="Link to this heading"></a></h2>
+<p>The test is based on the sample partial correlation coefficient, <span class="math notranslate nohighlight">\(r = \rho(X, Y | Z)\)</span>. To create a test statistic with a well-behaved sampling distribution, the test relies on the Fisher’s Z-transformation, first developed to handle the “probable error” of correlation coefficients from small samples (Fisher, 1921). The transformation of the partial correlation <span class="math notranslate nohighlight">\(r\)</span> is given by:</p>
+<div class="math notranslate nohighlight">
+\[Z(r) = \frac{1}{2} \ln\left(\frac{1+r}{1-r}\right)\]</div>
+<p>This can also be expressed as the inverse hyperbolic tangent, <code class="docutils literal notranslate"><span class="pre">artanh(r)</span></code>. This transformation stabilizes the variance and maps the correlation coefficient to an approximately normal distribution, a concept that was later explicitly extended to cover partial correlations (Fisher, 1924). The statistical properties and robustness of this transformation were later explored in extensive detail (Hotelling, 1953).</p>
+<p>Under the null hypothesis of conditional independence, the test statistic is constructed as:</p>
+<div class="math notranslate nohighlight">
+\[T = \sqrt{n - |Z| - 3} \cdot |Z(r)|\]</div>
+<p>where <span class="math notranslate nohighlight">\(n\)</span> is the sample size and <span class="math notranslate nohighlight">\(|Z|\)</span> is the number of conditioning variables. This statistic follows a standard normal distribution, <span class="math notranslate nohighlight">\(N(0, 1)\)</span>, from which the p-value is calculated.</p>
+</section>
+<section id="assumptions">
+<h2>Assumptions<a class="headerlink" href="#assumptions" title="Link to this heading"></a></h2>
+<p>The validity of the Fisher’s Z test rests on two strong assumptions:</p>
+<ul class="simple">
+<li><p><strong>Multivariate Normality</strong>: All variables (X, Y, and the conditioning set Z) are assumed to be drawn from a multivariate normal distribution. In such a distribution, zero partial correlation is mathematically equivalent to conditional independence, a property that is foundational to constraint-based causal discovery (Spirtes et al., 2000).</p></li>
+<li><p><strong>Linearity</strong>: The relationships between the variables are assumed to be linear. The test may have low power to detect non-linear dependencies.</p></li>
+</ul>
+</section>
+<section id="code-example">
+<h2>Code Example<a class="headerlink" href="#code-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">citk.tests</span><span class="w"> </span><span class="kn">import</span> <span class="n">FisherZ</span>
+
+<span class="c1"># Generate data where X and Y are independent given Z</span>
+<span class="c1"># X -&gt; Z -&gt; Y</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">X</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">Z</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Initialize the test</span>
+<span class="n">fisher_z_test</span> <span class="o">=</span> <span class="n">FisherZ</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Test for conditional independence of X and Y given Z</span>
+<span class="c1"># Expected: p-value is large (cannot reject H0 of independence)</span>
+<span class="n">p_value_conditional</span> <span class="o">=</span> <span class="n">fisher_z_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value for X _||_ Y | Z: </span><span class="si">{</span><span class="n">p_value_conditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Test for unconditional independence of X and Y</span>
+<span class="c1"># Expected: p-value is small (reject H0 of independence)</span>
+<span class="n">p_value_unconditional</span> <span class="o">=</span> <span class="n">fisher_z_test</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value for X _||_ Y: </span><span class="si">{</span><span class="n">p_value_unconditional</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<p>For a full list of parameters, see the API documentation: :class:<code class="docutils literal notranslate"><span class="pre">citk.tests.simple_tests.FisherZ</span></code>.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<p>Fisher, R. A. (1921). On the ‘probable error’ of a coefficient of correlation deduced from a small sample. <em>Metron, 1</em>(4), 1-32.</p>
+<p>Fisher, R. A. (1924). The distribution of the partial correlation coefficient. <em>Metron, 3</em>(3-4), 329-332.</p>
+<p>Hotelling, H. (1953). New light on the correlation coefficient and its transforms. <em>Journal of the Royal Statistical Society: Series B (Methodological), 15</em>(2), 193-225.</p>
+<p>Kalisch, M., &amp; Bühlmann, P. (2007). Estimating high-dimensional directed acyclic graphs with the PC-algorithm. <em>Journal of Machine Learning Research, 8</em>, 613-636.</p>
+<p>Spirtes, P., Glymour, C. N., &amp; Scheines, R. (2000). <em>Causation, prediction, and search</em>. MIT press.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="g_sq_test.html" class="btn btn-neutral float-left" title="G-Squared Test" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="spearman.html" class="btn btn-neutral float-right" title="Spearman’s Rho Test" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Pavel Averin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

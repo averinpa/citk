@@ -1,0 +1,167 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What is Conditional Independence? &mdash; CITK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="A Taxonomy of Conditional Independence Tests" href="taxonomy_of_tests.html" />
+    <link rel="prev" title="Interpreting Test Results" href="../guides/interpreting_results.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CITK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/choosing_a_test.html">How to Choose a Conditional Independence Test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/interpreting_results.html">Interpreting Test Results</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theoretical Foundations</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">What is Conditional Independence?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#formal-definition">Formal Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#intuitive-explanation">Intuitive Explanation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#why-it-matters-in-causal-discovery">Why It Matters in Causal Discovery</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy_of_tests.html">A Taxonomy of Conditional Independence Tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Conditional Independence Tests</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tests/index.html">Conditional Independence Test Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/citk.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CITK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">What is Conditional Independence?</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/theory/what_is_ci.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="what-is-conditional-independence">
+<h1>What is Conditional Independence?<a class="headerlink" href="#what-is-conditional-independence" title="Link to this heading"></a></h1>
+<p>Conditional Independence (CI) is a fundamental concept in probability theory and statistics, forming the bedrock of modern causal inference and graphical modeling.</p>
+<section id="formal-definition">
+<h2>Formal Definition<a class="headerlink" href="#formal-definition" title="Link to this heading"></a></h2>
+<p>Two variables, <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>, are said to be conditionally independent of each other given a third variable (or set of variables), <span class="math notranslate nohighlight">\(Z\)</span>, if and only if their conditional joint distribution, given <span class="math notranslate nohighlight">\(Z\)</span>, is equal to the product of their individual conditional distributions given <span class="math notranslate nohighlight">\(Z\)</span>.</p>
+<p>Mathematically, this is written as:</p>
+<p><span class="math notranslate nohighlight">\(X \perp Y \mid Z \iff P(X, Y \mid Z) = P(X \mid Z)P(Y \mid Z)\)</span></p>
+<p>This statement implies that once we know the value of <span class="math notranslate nohighlight">\(Z\)</span>, gaining knowledge about <span class="math notranslate nohighlight">\(Y\)</span> tells us nothing new about <span class="math notranslate nohighlight">\(X\)</span>, and vice-versa. The conditioning set <span class="math notranslate nohighlight">\(Z\)</span> “blocks” the flow of information between <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>.</p>
+</section>
+<section id="intuitive-explanation">
+<h2>Intuitive Explanation<a class="headerlink" href="#intuitive-explanation" title="Link to this heading"></a></h2>
+<p>Consider the following variables:</p>
+<ul class="simple">
+<li><p><strong>X</strong>: Ice Cream Sales</p></li>
+<li><p><strong>Y</strong>: Number of Drownings</p></li>
+<li><p><strong>Z</strong>: Average Daily Temperature</p></li>
+</ul>
+<p>In a typical city, you would observe a strong positive correlation between ice cream sales and drownings. As one goes up, the other tends to go up.</p>
+<p>However, this relationship is not causal. It is a result of a <strong>common cause</strong>, or a <strong>confounder</strong>: the temperature.</p>
+<ul class="simple">
+<li><p>When the temperature is high, more people buy ice cream.</p></li>
+<li><p>When the temperature is high, more people go swimming, which unfortunately leads to more drownings.</p></li>
+</ul>
+<p>If we <strong>condition</strong> on temperature (i.e., we look at data from only the days where the temperature was, say, 75°F), the relationship between ice cream sales and drownings would vanish. Knowing how many ice creams were sold on a 75°F day gives you no new information about how many drownings occurred on that same day.</p>
+<p>Thus, we can say: <strong>Ice Cream Sales <span class="math notranslate nohighlight">\(\perp\)</span> Drownings <span class="math notranslate nohighlight">\(\mid\)</span> Temperature</strong>.</p>
+</section>
+<section id="why-it-matters-in-causal-discovery">
+<h2>Why It Matters in Causal Discovery<a class="headerlink" href="#why-it-matters-in-causal-discovery" title="Link to this heading"></a></h2>
+<p>Conditional independence tests are the primary tool used by constraint-based causal discovery algorithms (like the PC algorithm). These algorithms work by systematically performing CI tests on the data to identify the “d-separations” in the underlying causal graph.</p>
+<p>By determining which variables become independent when conditioned on others, these algorithms can prune edges from a fully connected graph to reveal the likely causal structure that generated the data.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../guides/interpreting_results.html" class="btn btn-neutral float-left" title="Interpreting Test Results" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="taxonomy_of_tests.html" class="btn btn-neutral float-right" title="A Taxonomy of Conditional Independence Tests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Pavel Averin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
