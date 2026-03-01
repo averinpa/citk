@@ -30,6 +30,7 @@ dependencies = [
 [project.optional-dependencies]
 r = ["rpy2"]
 ml = ["lightgbm"]
+tigramite = ["tigramite"]
 docs = ["sphinx", "sphinx-rtd-theme", "myst-parser"]
 dev = ["pytest", "ipython", "jupyterlab", "ipykernel"]
 

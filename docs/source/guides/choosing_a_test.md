@@ -11,19 +11,19 @@ Here are the primary factors to consider when selecting a test:
 - **Continuous Data**: If your variables are all continuous, you have several options:
     - `fisherz_citk`: Assumes linear relationships and multivariate normal data. It is very fast but may fail if these assumptions are violated.
     - `spearman`: A non-parametric alternative that works on ranked data. It is suitable for monotonic (but not necessarily linear) relationships.
-    - `kci`: A kernel-based test for complex, non-linear relationships. It is more computationally intensive.
+    - `kci`: Optional R-backed KCIT (`RCIT::KCIT`) for complex, non-linear relationships.
     - `rcot`, `rcit`: Optional R-backed kernel/random-feature tests from the RCIT package.
-    - `reg`: Likelihood-ratio test via linear regression (OLS).
+    - `cmiknn`, `cmiknn_mixed`: Optional tigramite kNN-CMI tests.
+    - `regci`: Optional tigramite parametric mixed-data regression CI.
     - `rf`, `dml`, `crit`, `edml`: Flexible ML-based options for non-linear structure.
 
 - **Discrete Data**: If your variables are categorical:
     - `gsq` (G-Square) or `chisq` (Chi-Square): Classical tests based on contingency tables.
-    - `logit`: GLM-based likelihood-ratio test for binary outcomes.
-    - `pois`: GLM-based likelihood-ratio test for count outcomes.
 
 - **Mixed Data**: Current built-in options are limited; discretization is still a practical baseline for `gsq`/`chisq`.
     - `disc_chisq`, `disc_gsq`: Equal-frequency discretization adapters around classical discrete tests.
     - `dummy_fisherz`: One-hot encoding adapter with Fisher-Z aggregation.
+    - `hartemink_chisq`: Information-preserving Hartemink discretization (via R `bnlearn`) + Chi-square.
 
 ### 2. Relationship Type
 
@@ -37,13 +37,12 @@ Here are the primary factors to consider when selecting a test:
 |-----------|-----------|-------------------|-------------------|
 | `fisherz_citk` | Continuous | Linear | Approximate Gaussianity |
 | `spearman` | Continuous | Monotonic | Monotonicity |
-| `reg` | Continuous | Mostly linear | Correct linear specification |
 | `gsq` / `chisq` | Discrete | Any | Adequate contingency support |
-| `logit` | Discrete (binary target) | Any | Logistic GLM fit is appropriate |
-| `pois` | Discrete (count target) | Any | Poisson GLM fit is appropriate |
-| `kci` | Continuous | Any | Kernel CI approximation |
+| `kci` | Continuous | Any | Requires `rpy2` + R `RCIT` package |
 | `rcot` / `rcit` | Continuous | Any | Requires `rpy2` + R `RCIT` package |
+| `cmiknn` / `cmiknn_mixed` / `regci` | Mixed or continuous | Any | Requires `tigramite` |
 | `rf` / `dml` / `crit` / `edml` | Continuous | Any | ML residualization quality |
 | `gcm_linear` / `gcm_rf` / `wgcm_rf` | Continuous | Any | Residual covariance test |
 | `disc_chisq` / `disc_gsq` | Mixed or continuous | Any | Discretization quality |
 | `dummy_fisherz` | Mixed or discrete | Any | One-hot encoding fidelity |
+| `hartemink_chisq` | Mixed or continuous | Any | Requires `rpy2` + R `bnlearn` |

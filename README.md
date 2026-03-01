@@ -65,10 +65,7 @@ print(cg.G.get_edges())
 | `spearman` | Simple | `causal-learn` Fisher-Z on ranked data |
 | `gsq` | Simple | `causal-learn` (`Chisq_or_Gsq(..., method_name="gsq")`) |
 | `chisq` | Simple | `causal-learn` (`Chisq_or_Gsq(..., method_name="chisq")`) |
-| `reg` | Statistical Model | `statsmodels` OLS likelihood-ratio CI |
-| `logit` | Statistical Model | `statsmodels` Logit likelihood-ratio CI |
-| `pois` | Statistical Model | `statsmodels` Poisson GLM likelihood-ratio CI |
-| `kci` | ML-Based | `causal-learn` KCI wrapper |
+| `kci` | Optional R-Based | R `RCIT::KCIT` via `rpy2` (capped at n=2000) |
 | `rf` | ML-Based | `scikit-learn` RandomForest + permutation CI |
 | `dml` | ML-Based | `scikit-learn` residualization + `statsmodels` residual regression test |
 | `crit` | ML-Based | `scikit-learn` quantile models + `statsmodels` residual regression test |
@@ -79,7 +76,11 @@ print(cg.G.get_edges())
 | `disc_chisq` | Adapter | Native `citk` equal-frequency discretization + `causal-learn` Chi-Square |
 | `disc_gsq` | Adapter | Native `citk` equal-frequency discretization + `causal-learn` G-Square |
 | `dummy_fisherz` | Adapter | Native `citk` one-hot encoding + `causal-learn` Fisher-Z aggregation |
+| `hartemink_chisq` | Adapter (Optional R-Based) | R `bnlearn` Hartemink discretization + `causal-learn` Chi-Square |
 | `rcot` | Optional R-Based | R `RCIT::RCoT` via `rpy2` |
 | `rcit` | Optional R-Based | R `RCIT::RCIT` via `rpy2` |
+| `cmiknn` | Optional Tigramite | `tigramite.independence_tests.cmiknn.CMIknn` |
+| `cmiknn_mixed` | Optional Tigramite | `tigramite` CMIknnMixed wrapper |
+| `regci` | Optional Tigramite | `tigramite.independence_tests.regressionCI.RegressionCI` |
 
 For detailed documentation on each test and its parameters, please see our full documentation page [HERE](https://averinpa.github.io/citk/).

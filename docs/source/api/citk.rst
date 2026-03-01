@@ -20,18 +20,12 @@ These are classical statistical methods for conditional independence testing.
 .. autoclass:: citk.tests.GSq
    :show-inheritance:
 
-Statistical Model-Based Tests
------------------------------
+Regression-Based Tests
+----------------------
 
-These tests use statistical regression models to test for conditional independence.
+These tests use regression-based formulations for conditional independence.
 
-.. autoclass:: citk.tests.Regression
-   :show-inheritance:
-
-.. autoclass:: citk.tests.Logit
-   :show-inheritance:
-
-.. autoclass:: citk.tests.Poisson
+.. autoclass:: citk.tests.RegressionCI
    :show-inheritance:
 
 Machine Learning-Based Tests

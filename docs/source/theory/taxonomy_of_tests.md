@@ -25,7 +25,7 @@ These are classical statistical tests designed for discrete (categorical) data.
 These tests use regression models to check for independence.
 
 - **Core Idea**: Regress one variable onto the other variables (including the conditioning set). If the coefficient for the target variable is statistically indistinguishable from zero, it suggests independence.
-- **Example**: `reg` (Linear Regression), `logit` (Logistic Regression), `pois` (Poisson Regression)
+- **Example**: `regci` (RegressionCI from tigramite)
 - **Strengths**: Can be tailored to the specific data generating process (e.g., binary outcomes with `logit`).
 - **Weaknesses**: Make strong parametric assumptions about the functional form of the relationship.
 

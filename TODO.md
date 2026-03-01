@@ -27,17 +27,17 @@
 
 - [x] **RCoT** — Implemented via R `RCIT::RCoT` wrapper and registered as `'rcot'`.
 - [x] **RCIT** — Implemented via R `RCIT::RCIT` wrapper and registered as `'rcit'`.
-- [ ] **KCI via R** — Current KCI wraps causal-learn which has numerical overflow issues. Rewrite to use R `RCIT::KCIT` via rpy2. Cap at n=2000. Keep registration as `'kci'`.
+- [x] **KCI via R** — Rewired to R `RCIT::KCIT` via rpy2 with n<=2000 guard. Registration kept as `'kci'`.
 
 ### kNN CMI family
 
-- [ ] **CMIknn** — Conditional mutual information via kNN density estimation (Runge 2018). Wrap `tigramite.independence_tests.cmiknn.CMIknn`. Register as `'cmiknn'`.
-- [ ] **CMIknnMixed** — Mixed-type CMI via kNN for multivariate discrete/categorical/continuous variables (Runge, tigramite). Permutation-based test. Wrap `tigramite.independence_tests.cmiknn.CMIknnMixed`. Register as `'cmiknn_mixed'`.
+- [x] **CMIknn** — Wrapped `tigramite.independence_tests.cmiknn.CMIknn`. Registered as `'cmiknn'`.
+- [x] **CMIknnMixed** — Wrapped tigramite `CMIknnMixed` (with import-path fallback). Registered as `'cmiknn_mixed'`.
 - [ ] **mCMIkNN** — Mixed-type CMI via kNN (Huegle et al. 2023). Wrap from `/Users/pavelaverin/Projects/mCMIkNN/src`. Register as `'mcmiknn'`.
 
 ### Regression family
 
-- [ ] **RegressionCI** — Parametric regression-based CI test for mixed data (Runge, tigramite). Tests X ind Y given Z by comparing nested regressions Y|XZ vs Y|Z using deviance. Handles arbitrary mix of continuous and categorical variables. Wrap `tigramite.independence_tests.regressionCI.RegressionCI`. Register as `'regci'`.
+- [x] **RegressionCI** — Wrapped `tigramite.independence_tests.regressionCI.RegressionCI`. Registered as `'regci'`.
 
 ### GCM family
 
@@ -56,16 +56,30 @@ These wrap existing tests with a data transformation step. Each is a thin wrappe
 - [x] **Discretize + Chi-squared** — Equal-frequency discretization adapter implemented. Registered as `'disc_chisq'`.
 - [x] **Discretize + G-squared** — Equal-frequency discretization adapter implemented. Registered as `'disc_gsq'`.
 - [x] **Dummy-code + Fisher Z** — One-hot encoding adapter with Fisher combined p-value implemented. Registered as `'dummy_fisherz'`.
-- [ ] **Hartemink + Chi-squared** — Hartemink information-preserving discretization via R bnlearn, then chi-squared. Register as `'hartemink_chisq'`.
+- [x] **Hartemink + Chi-squared** — Implemented via R `bnlearn` Hartemink discretization + chi-squared. Registered as `'hartemink_chisq'`.
+
+## Reorganize test modules by statistical family
+
+Current modules are grouped by **implementation source** (`simple_tests`, `statistical_model_tests`, `ml_based_tests`, `r_based_tests`, `extended_tests`, `tigramite_based_tests`). Reorganize to match the **survey taxonomy** (Section 5):
+
+- [ ] **`partial_correlation_tests.py`** — FisherZ, Spearman (survey §5.1)
+- [ ] **`contingency_table_tests.py`** — ChiSq, GSq (survey §5.2)
+- [ ] **`regression_tests.py`** — RegressionCI (survey §5.3)
+- [ ] **`nearest_neighbor_tests.py`** — CMIknn, CMIknnMixed, mCMIkNN (survey §5.4)
+- [ ] **`kernel_tests.py`** — KCI, RCIT, RCoT (survey §5.5). Keep rpy2 lazy-import pattern.
+- [ ] **`ml_based_tests.py`** — GCMLinear, GCMRF, WGCMRF, DML, CRIT, EDML (survey §5.6)
+- [ ] **`adapter_tests.py`** — DiscChiSq, DiscGSq, DummyFisherZ, HarteminkChiSq (survey §5.7 / adapters)
+- [ ] **Update `__init__.py`** — new imports, preserve `TEST_REGISTRY` and optional-import guards.
+- [ ] **Update tests/README and docs** — reflect new module names.
 
 ## Remove unused regression-based tests
 
 These tests are not needed for Paper 1 benchmark and will be replaced by RegressionCI from tigramite.
 
-- [ ] **Delete Regression** (`'reg'`) — Remove `Regression` class from `citk/tests/statistical_model_tests.py`.
-- [ ] **Delete Logit** (`'logit'`) — Remove `Logit` class from `citk/tests/statistical_model_tests.py`.
-- [ ] **Delete Poisson** (`'pois'`) — Remove `Poisson` class from `citk/tests/statistical_model_tests.py`.
-- [ ] **Clean up registrations and imports** — Remove deleted tests from `__init__.py`, update `TEST_REGISTRY`, remove unused smoke tests.
+- [x] **Delete Regression** (`'reg'`) — Removed legacy `Regression` implementation.
+- [x] **Delete Logit** (`'logit'`) — Removed legacy `Logit` implementation.
+- [x] **Delete Poisson** (`'pois'`) — Removed legacy `Poisson` implementation.
+- [x] **Clean up registrations and imports** — Removed deleted tests from exports and smoke tests; docs updated.
 
 ## rpy2 integration
 

@@ -24,13 +24,21 @@ LightGBM is not required for core `citk` functionality. Install only if you want
 uv sync --extra ml
 ```
 
+## Optional Tigramite Extra
+
+For tigramite wrappers (`cmiknn`, `cmiknn_mixed`, `regci`):
+
+```bash
+uv sync --extra tigramite
+```
+
 ## Optional R-Based Setup
 
 R-backed tests are optional. They require:
 
 1. Python package `rpy2` (already in the `r` extra)
 2. R package `RCIT` from GitHub repository `ericstrobl/RCIT`
-3. R package `bnlearn` from CRAN
+3. R package `bnlearn` from CRAN (for `hartemink_chisq`)
 
 Example:
 

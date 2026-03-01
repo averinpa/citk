@@ -12,9 +12,6 @@ This section provides detailed documentation for each of the conditional indepen
    g_sq_test
    fisher_z_test
    spearman
-   logit_test
-   poisson_test
-   regression_test
    kci_test
    random_forest_test
    dml_test

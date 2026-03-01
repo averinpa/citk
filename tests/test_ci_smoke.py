@@ -4,7 +4,6 @@ import numpy as np
 import pytest
 
 from citk.tests.simple_tests import FisherZ, Spearman, GSq, ChiSq
-from citk.tests.statistical_model_tests import Regression, Logit, Poisson
 from citk.tests.extended_tests import DiscChiSq, DiscGSq, DummyFisherZ, GCMLinear, GCMRF, WGCMRF
 
 
@@ -30,28 +29,7 @@ def _discrete_data(seed: int = 1, n: int = 400):
     return data_ind, data_dep
 
 
-def _binary_target_data(seed: int = 2, n: int = 500):
-    rng = np.random.default_rng(seed)
-    x = rng.normal(size=n)
-    y_ind = rng.integers(0, 2, size=n)
-    y_dep = (x + 0.25 * rng.normal(size=n) > 0).astype(int)
-    data_ind = np.column_stack([x, y_ind])
-    data_dep = np.column_stack([x, y_dep])
-    return data_ind, data_dep
-
-
-def _count_target_data(seed: int = 3, n: int = 500):
-    rng = np.random.default_rng(seed)
-    x = rng.normal(size=n)
-    y_ind = rng.poisson(1.5, size=n)
-    rate_dep = np.exp(0.7 * x)
-    y_dep = rng.poisson(rate_dep)
-    data_ind = np.column_stack([x, y_ind])
-    data_dep = np.column_stack([x, y_dep])
-    return data_ind, data_dep
-
-
-@pytest.mark.parametrize("test_cls", [FisherZ, Spearman, Regression])
+@pytest.mark.parametrize("test_cls", [FisherZ, Spearman])
 def test_continuous_smoke(test_cls):
     data_ind, data_dep = _continuous_data()
     p_ind = test_cls(data_ind)(0, 1)
@@ -67,23 +45,6 @@ def test_discrete_smoke(test_cls):
     p_dep = test_cls(data_dep)(0, 1)
     assert p_ind > 0.05
     assert p_dep < 0.05
-
-
-def test_logit_smoke():
-    data_ind, data_dep = _binary_target_data()
-    p_ind = Logit(data_ind)(0, 1)
-    p_dep = Logit(data_dep)(0, 1)
-    assert p_ind > 0.05
-    assert p_dep < 0.05
-
-
-def test_poisson_smoke():
-    data_ind, data_dep = _count_target_data()
-    p_ind = Poisson(data_ind)(0, 1)
-    p_dep = Poisson(data_dep)(0, 1)
-    assert p_ind > 0.05
-    assert p_dep < 0.05
-
 
 def test_kci_smoke():
     ml_module = importlib.import_module("citk.tests.ml_based_tests")
@@ -173,3 +134,47 @@ def test_rcot_missing_rpy2_has_clear_error():
     data_ind, _ = _continuous_data(seed=9, n=80)
     with pytest.raises(ImportError, match="rpy2"):
         RCoT(data_ind)(0, 1)
+
+
+def test_kci_missing_rpy2_has_clear_error():
+    if importlib.util.find_spec("rpy2") is not None:
+        pytest.skip("rpy2 is installed; missing-dependency path is not applicable")
+
+    from citk.tests.r_based_tests import RKCIT
+
+    data_ind, _ = _continuous_data(seed=13, n=80)
+    with pytest.raises(ImportError, match="rpy2"):
+        RKCIT(data_ind)(0, 1)
+
+
+def test_cmiknn_missing_tigramite_has_clear_error():
+    if importlib.util.find_spec("tigramite") is not None:
+        pytest.skip("tigramite is installed; missing-dependency path is not applicable")
+
+    from citk.tests.tigramite_based_tests import CMIknn
+
+    data_ind, _ = _continuous_data(seed=14, n=80)
+    with pytest.raises(ImportError, match="tigramite"):
+        CMIknn(data_ind)(0, 1)
+
+
+def test_regci_missing_tigramite_has_clear_error():
+    if importlib.util.find_spec("tigramite") is not None:
+        pytest.skip("tigramite is installed; missing-dependency path is not applicable")
+
+    from citk.tests.tigramite_based_tests import RegressionCI
+
+    data_ind, _ = _continuous_data(seed=15, n=80)
+    with pytest.raises(ImportError, match="tigramite"):
+        RegressionCI(data_ind)(0, 1)
+
+
+def test_hartemink_missing_rpy2_has_clear_error():
+    if importlib.util.find_spec("rpy2") is not None:
+        pytest.skip("rpy2 is installed; missing-dependency path is not applicable")
+
+    from citk.tests.r_based_tests import HarteminkChiSq
+
+    data_ind, _ = _continuous_data(seed=16, n=80)
+    with pytest.raises(ImportError, match="rpy2"):
+        HarteminkChiSq(data_ind)(0, 1)

@@ -5,22 +5,10 @@ citk.tests package
 
 This package contains the implementations of various conditional independence tests.
 
-Statistical Model-Based Tests
------------------------------
+Regression-Based Tests
+----------------------
 
-.. autoclass:: citk.tests.statistical_model_tests.Regression
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :special-members: __call__
-
-.. autoclass:: citk.tests.statistical_model_tests.Logit
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :special-members: __call__
-
-.. autoclass:: citk.tests.statistical_model_tests.Poisson
+.. autoclass:: citk.tests.tigramite_based_tests.RegressionCI
    :members:
    :undoc-members:
    :show-inheritance:
