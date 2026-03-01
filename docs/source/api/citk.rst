@@ -28,6 +28,27 @@ These tests use regression-based formulations for conditional independence.
 .. autoclass:: citk.tests.RegressionCI
    :show-inheritance:
 
+Nearest Neighbor Tests
+----------------------
+
+.. autoclass:: citk.tests.CMIknn
+   :show-inheritance:
+
+.. autoclass:: citk.tests.CMIknnMixed
+   :show-inheritance:
+
+.. autoclass:: citk.tests.MCMIknn
+   :show-inheritance:
+
+Kernel Tests
+------------
+
+.. autoclass:: citk.tests.RCoT
+   :show-inheritance:
+
+.. autoclass:: citk.tests.RCIT
+   :show-inheritance:
+
 Machine Learning-Based Tests
 ----------------------------
 
@@ -46,4 +67,31 @@ These tests leverage machine learning models to detect complex, non-linear condi
    :show-inheritance:
 
 .. autoclass:: citk.tests.EDML
+   :show-inheritance:
+
+.. autoclass:: citk.tests.GCMLinear
+   :show-inheritance:
+
+.. autoclass:: citk.tests.GCMRF
+   :show-inheritance:
+
+.. autoclass:: citk.tests.WGCMRF
+   :show-inheritance:
+
+Adapter Tests
+-------------
+
+.. autoclass:: citk.tests.DiscChiSq
+   :show-inheritance:
+
+.. autoclass:: citk.tests.DiscGSq
+   :show-inheritance:
+
+.. autoclass:: citk.tests.DummyFisherZ
+   :show-inheritance:
+
+.. autoclass:: citk.tests.HarteminkChiSq
+   :show-inheritance:
+
+.. autoclass:: citk.tests.DCT
    :show-inheritance:

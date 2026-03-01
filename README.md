@@ -71,6 +71,7 @@ print(cg.G.get_edges())
 | `regci` | Regression | `tigramite.independence_tests.regressionCI.RegressionCI` (optional) |
 | `cmiknn` | Nearest Neighbor | `tigramite.independence_tests.cmiknn.CMIknn` (optional) |
 | `cmiknn_mixed` | Nearest Neighbor | `tigramite` CMIknnMixed wrapper (optional) |
+| `mcmiknn` | Nearest Neighbor | Local wrapper from `/Users/pavelaverin/Projects/mCMIkNN/src` (optional) |
 | `rf` | ML-Based | `scikit-learn` RandomForest + permutation CI |
 | `dml` | ML-Based | `scikit-learn` residualization + `statsmodels` residual regression test |
 | `crit` | ML-Based | `scikit-learn` quantile models + `statsmodels` residual regression test |
@@ -82,5 +83,16 @@ print(cg.G.get_edges())
 | `disc_gsq` | Adapter | Native `citk` equal-frequency discretization + `causal-learn` G-Square |
 | `dummy_fisherz` | Adapter | Native `citk` one-hot encoding + `causal-learn` Fisher-Z aggregation |
 | `hartemink_chisq` | Adapter | R `bnlearn` Hartemink discretization + `causal-learn` Chi-Square (optional) |
+| `dct` | Adapter | Local wrapper from `/Users/pavelaverin/Projects/DCT` (optional) |
+
+### Module Layout (Survey Taxonomy)
+
+- `citk/tests/partial_correlation_tests.py`
+- `citk/tests/contingency_table_tests.py`
+- `citk/tests/regression_tests.py`
+- `citk/tests/nearest_neighbor_tests.py`
+- `citk/tests/kernel_tests.py`
+- `citk/tests/ml_based_tests.py`
+- `citk/tests/adapter_tests.py`
 
 For detailed documentation on each test and its parameters, please see our full documentation page [HERE](https://averinpa.github.io/citk/).

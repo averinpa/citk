@@ -14,6 +14,7 @@ Here are the primary factors to consider when selecting a test:
     - `kci`: Optional R-backed KCIT (`RCIT::KCIT`) for complex, non-linear relationships.
     - `rcot`, `rcit`: Optional R-backed kernel/random-feature tests from the RCIT package.
     - `cmiknn`, `cmiknn_mixed`: Optional tigramite kNN-CMI tests.
+    - `mcmiknn`: Optional mixed-type kNN CMI wrapper from local mCMIkNN repo.
     - `regci`: Optional tigramite parametric mixed-data regression CI.
     - `rf`, `dml`, `crit`, `edml`: Flexible ML-based options for non-linear structure.
 
@@ -24,6 +25,7 @@ Here are the primary factors to consider when selecting a test:
     - `disc_chisq`, `disc_gsq`: Equal-frequency discretization adapters around classical discrete tests.
     - `dummy_fisherz`: One-hot encoding adapter with Fisher-Z aggregation.
     - `hartemink_chisq`: Information-preserving Hartemink discretization (via R `bnlearn`) + Chi-square.
+    - `dct`: Optional DCT wrapper from local DCT repository.
 
 ### 2. Relationship Type
 
@@ -41,8 +43,10 @@ Here are the primary factors to consider when selecting a test:
 | `kci` | Continuous | Any | Requires `rpy2` + R `RCIT` package |
 | `rcot` / `rcit` | Continuous | Any | Requires `rpy2` + R `RCIT` package |
 | `cmiknn` / `cmiknn_mixed` / `regci` | Mixed or continuous | Any | Requires `tigramite` |
+| `mcmiknn` | Mixed | Any | Requires local mCMIkNN repository |
 | `rf` / `dml` / `crit` / `edml` | Continuous | Any | ML residualization quality |
 | `gcm_linear` / `gcm_rf` / `wgcm_rf` | Continuous | Any | Residual covariance test |
 | `disc_chisq` / `disc_gsq` | Mixed or continuous | Any | Discretization quality |
 | `dummy_fisherz` | Mixed or discrete | Any | One-hot encoding fidelity |
 | `hartemink_chisq` | Mixed or continuous | Any | Requires `rpy2` + R `bnlearn` |
+| `dct` | Mixed or discretized continuous | Any | Requires local DCT repository |

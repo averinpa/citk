@@ -33,7 +33,7 @@
 
 - [x] **CMIknn** — Wrapped `tigramite.independence_tests.cmiknn.CMIknn`. Registered as `'cmiknn'`.
 - [x] **CMIknnMixed** — Wrapped tigramite `CMIknnMixed` (with import-path fallback). Registered as `'cmiknn_mixed'`.
-- [ ] **mCMIkNN** — Mixed-type CMI via kNN (Huegle et al. 2023). Wrap from `/Users/pavelaverin/Projects/mCMIkNN/src`. Register as `'mcmiknn'`.
+- [x] **mCMIkNN** — Added wrapper from `/Users/pavelaverin/Projects/mCMIkNN/src` with lazy local import. Registered as `'mcmiknn'`.
 
 ### Regression family
 
@@ -47,7 +47,7 @@
 
 ### Discretization-aware
 
-- [ ] **DCT** — Discreteness-aware CI test (Dong et al. 2025). Wrap from `/Users/pavelaverin/Projects/DCT`. Scipy shim already applied. Register as `'dct'`. Secondary test — assumes continuous data was discretized, not natively categorical.
+- [x] **DCT** — Added wrapper from `/Users/pavelaverin/Projects/DCT` with lazy local import. Registered as `'dct'`.
 
 ### Adapter strategies
 
@@ -62,15 +62,15 @@ These wrap existing tests with a data transformation step. Each is a thin wrappe
 
 Current modules are grouped by **implementation source** (`simple_tests`, `statistical_model_tests`, `ml_based_tests`, `r_based_tests`, `extended_tests`, `tigramite_based_tests`). Reorganize to match the **survey taxonomy** (Section 5):
 
-- [ ] **`partial_correlation_tests.py`** — FisherZ, Spearman (survey §5.1)
-- [ ] **`contingency_table_tests.py`** — ChiSq, GSq (survey §5.2)
-- [ ] **`regression_tests.py`** — RegressionCI (survey §5.3)
-- [ ] **`nearest_neighbor_tests.py`** — CMIknn, CMIknnMixed, mCMIkNN (survey §5.4)
-- [ ] **`kernel_tests.py`** — KCI, RCIT, RCoT (survey §5.5). Keep rpy2 lazy-import pattern.
-- [ ] **`ml_based_tests.py`** — GCMLinear, GCMRF, WGCMRF, DML, CRIT, EDML (survey §5.6)
-- [ ] **`adapter_tests.py`** — DiscChiSq, DiscGSq, DummyFisherZ, HarteminkChiSq (survey §5.7 / adapters)
-- [ ] **Update `__init__.py`** — new imports, preserve `TEST_REGISTRY` and optional-import guards.
-- [ ] **Update tests/README and docs** — reflect new module names.
+- [x] **`partial_correlation_tests.py`** — Added taxonomy module for FisherZ, Spearman.
+- [x] **`contingency_table_tests.py`** — Added taxonomy module for ChiSq, GSq.
+- [x] **`regression_tests.py`** — Added taxonomy module for RegressionCI.
+- [x] **`nearest_neighbor_tests.py`** — Added taxonomy module for CMIknn, CMIknnMixed, mCMIkNN.
+- [x] **`kernel_tests.py`** — Added taxonomy module for KCI, RCIT, RCoT.
+- [x] **`ml_based_tests.py`** — Re-exported GCM family alongside DML/CRIT/EDML in taxonomy context.
+- [x] **`adapter_tests.py`** — Added taxonomy module for DiscChiSq, DiscGSq, DummyFisherZ, HarteminkChiSq.
+- [x] **Update `__init__.py`** — switched package exports to taxonomy modules.
+- [x] **Update tests/README and docs** — reflected new module names and taxonomy layout.
 
 ## Remove unused regression-based tests
 

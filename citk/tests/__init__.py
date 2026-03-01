@@ -1,26 +1,19 @@
-from .simple_tests import FisherZ, GSq, ChiSq, Spearman
-from .extended_tests import DiscChiSq, DiscGSq, DummyFisherZ, GCMLinear, GCMRF, WGCMRF
-from .tigramite_based_tests import CMIknn, CMIknnMixed, RegressionCI
-
-try:
-    from .ml_based_tests import KCI, RandomForest, DML, CRIT, EDML
-except ModuleNotFoundError:
-    KCI = RandomForest = DML = CRIT = EDML = None
-
-try:
-    from .r_based_tests import RCoT, RCIT, HarteminkChiSq
-except ModuleNotFoundError:
-    RCoT = RCIT = HarteminkChiSq = None
+from .adapter_tests import DiscChiSq, DiscGSq, DummyFisherZ, HarteminkChiSq
+from .contingency_table_tests import ChiSq, GSq
+from .external_repo_tests import DCT
+from .kernel_tests import KCI, RCIT, RCoT
+from .ml_based_tests import CRIT, DML, EDML, RandomForest, GCMLinear, GCMRF, WGCMRF
+from .nearest_neighbor_tests import CMIknn, CMIknnMixed, MCMIknn
+from .partial_correlation_tests import FisherZ, Spearman
+from .regression_tests import RegressionCI
 
 __all__ = [
     "FisherZ", "GSq", "ChiSq", "Spearman",
     "DiscChiSq", "DiscGSq", "DummyFisherZ",
     "GCMLinear", "GCMRF", "WGCMRF",
     "CMIknn", "CMIknnMixed", "RegressionCI",
+    "MCMIknn", "DCT",
+    "KCI", "RCIT", "RCoT",
+    "RandomForest", "DML", "CRIT", "EDML",
+    "HarteminkChiSq",
 ]
-
-if KCI is not None:
-    __all__.extend(["KCI", "RandomForest", "DML", "CRIT", "EDML"])
-
-if RCoT is not None:
-    __all__.extend(["RCoT", "RCIT", "HarteminkChiSq"])

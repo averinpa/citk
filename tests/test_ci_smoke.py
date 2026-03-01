@@ -1,10 +1,14 @@
 import importlib
+from pathlib import Path
 
 import numpy as np
 import pytest
 
-from citk.tests.simple_tests import FisherZ, Spearman, GSq, ChiSq
-from citk.tests.extended_tests import DiscChiSq, DiscGSq, DummyFisherZ, GCMLinear, GCMRF, WGCMRF
+from citk.tests.adapter_tests import DiscChiSq, DiscGSq, DummyFisherZ
+from citk.tests.external_repo_tests import DCT, MCMIknn
+from citk.tests.ml_based_tests import GCMLinear, GCMRF, WGCMRF
+from citk.tests.contingency_table_tests import GSq, ChiSq
+from citk.tests.partial_correlation_tests import FisherZ, Spearman
 
 
 def _continuous_data(seed: int = 0, n: int = 250):
@@ -178,3 +182,23 @@ def test_hartemink_missing_rpy2_has_clear_error():
     data_ind, _ = _continuous_data(seed=16, n=80)
     with pytest.raises(ImportError, match="rpy2"):
         HarteminkChiSq(data_ind)(0, 1)
+
+
+def test_mcmiknn_missing_local_repo_has_clear_error():
+    repo_path = Path("/Users/pavelaverin/Projects/mCMIkNN/src")
+    if repo_path.exists():
+        pytest.skip("local mCMIkNN repo is present; missing-repo path is not applicable")
+
+    data_ind, _ = _continuous_data(seed=17, n=80)
+    with pytest.raises(ImportError, match="mCMIkNN wrapper requires local source"):
+        MCMIknn(data_ind)(0, 1)
+
+
+def test_dct_missing_local_repo_has_clear_error():
+    repo_path = Path("/Users/pavelaverin/Projects/DCT")
+    if repo_path.exists():
+        pytest.skip("local DCT repo is present; missing-repo path is not applicable")
+
+    data_ind, _ = _continuous_data(seed=18, n=80)
+    with pytest.raises(ImportError, match="DCT wrapper requires local source"):
+        DCT(data_ind)(0, 1)

@@ -32,6 +32,15 @@ For tigramite wrappers (`cmiknn`, `cmiknn_mixed`, `regci`):
 uv sync --extra tigramite
 ```
 
+## Local External Wrappers
+
+Two optional wrappers currently expect local repositories:
+
+1. `mcmiknn` -> `/Users/pavelaverin/Projects/mCMIkNN/src`
+2. `dct` -> `/Users/pavelaverin/Projects/DCT`
+
+If those paths are not available, these wrappers raise a clear `ImportError` when called.
+
 ## Optional R-Based Setup
 
 R-backed tests are optional. They require:
