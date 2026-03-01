@@ -59,11 +59,27 @@ print(cg.G.get_edges())
 
 ## Available Tests
 
-- **Simple Tests**: `fisherz_citk`, `spearman`, `gsq`, `chisq`
-- **Statistical Model Tests**: `reg`, `logit`, `pois`
-- **ML-Based Tests**: `kci`, `rf`, `dml`, `crit`, `edml`
-- **GCM Family**: `gcm_linear`, `gcm_rf`, `wgcm_rf`
-- **Adapter Tests**: `disc_chisq`, `disc_gsq`, `dummy_fisherz`
-- **Optional R-Based Tests**: `rcot`, `rcit` (requires `rpy2` and the R `RCIT` package)
+| Test Name | Family | Wrapped From |
+|---|---|---|
+| `fisherz_citk` | Simple | `causal-learn` (`CIT(..., method_name="fisherz")`) |
+| `spearman` | Simple | `causal-learn` Fisher-Z on ranked data |
+| `gsq` | Simple | `causal-learn` (`Chisq_or_Gsq(..., method_name="gsq")`) |
+| `chisq` | Simple | `causal-learn` (`Chisq_or_Gsq(..., method_name="chisq")`) |
+| `reg` | Statistical Model | `statsmodels` OLS likelihood-ratio CI |
+| `logit` | Statistical Model | `statsmodels` Logit likelihood-ratio CI |
+| `pois` | Statistical Model | `statsmodels` Poisson GLM likelihood-ratio CI |
+| `kci` | ML-Based | `causal-learn` KCI wrapper |
+| `rf` | ML-Based | `scikit-learn` RandomForest + permutation CI |
+| `dml` | ML-Based | `scikit-learn` residualization + `statsmodels` residual regression test |
+| `crit` | ML-Based | `scikit-learn` quantile models + `statsmodels` residual regression test |
+| `edml` | ML-Based | `scikit-learn` residualization + e-value betting |
+| `gcm_linear` | GCM | Native `citk` (OLS residualization + asymptotic normal test) |
+| `gcm_rf` | GCM | Native `citk` (RandomForest residualization + asymptotic normal test) |
+| `wgcm_rf` | GCM | Native `citk` (sample-split weighted GCM with RandomForest) |
+| `disc_chisq` | Adapter | Native `citk` equal-frequency discretization + `causal-learn` Chi-Square |
+| `disc_gsq` | Adapter | Native `citk` equal-frequency discretization + `causal-learn` G-Square |
+| `dummy_fisherz` | Adapter | Native `citk` one-hot encoding + `causal-learn` Fisher-Z aggregation |
+| `rcot` | Optional R-Based | R `RCIT::RCoT` via `rpy2` |
+| `rcit` | Optional R-Based | R `RCIT::RCIT` via `rpy2` |
 
 For detailed documentation on each test and its parameters, please see our full documentation page [HERE](https://averinpa.github.io/citk/).
