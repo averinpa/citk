@@ -8,6 +8,8 @@ class CITKTest(CIT_Base):
     It standardizes the interface to be compatible with causal-learn and
     implements a robust file-based caching mechanism.
     """
+    supported_dtypes = set()
+
     def __init__(self, data, **kwargs):
         """
         Parameters
@@ -18,6 +20,11 @@ class CITKTest(CIT_Base):
         # The parent __init__ from causallearn's CIT_Base handles cache loading.
         # We just need to ensure kwargs (containing cache_path) are passed up.
         super().__init__(data, **kwargs)
+
+    def _normalize_condition_set(self, condition_set):
+        if condition_set is None:
+            return []
+        return list(condition_set)
 
     def save_cache(self):
         """
@@ -43,22 +50,14 @@ class CITKTest(CIT_Base):
         self.save_cache()
 
     def __call__(self, X, Y, condition_set=None, **kwargs):
-        """
-        Executes the conditional independence test.
-        Subclasses must implement this method.
+        condition_set = self._normalize_condition_set(condition_set)
+        _, _, _, cache_key = self.get_formatted_XYZ_and_cachekey(X, Y, condition_set)
+        if cache_key in self.pvalue_cache:
+            return float(self.pvalue_cache[cache_key])
 
-        Parameters
-        ----------
-        X : int
-            The index of the first variable.
-        Y : int
-            The index of the second variable.
-        condition_set : list[int], optional
-            A list of indices for the conditioning set. Can be empty.
+        p_value = float(self._compute(X, Y, condition_set, **kwargs))
+        self.pvalue_cache[cache_key] = str(p_value)
+        return p_value
 
-        Returns
-        -------
-        p_value : float
-            The p-value of the test.
-        """
-        raise NotImplementedError("Subclasses must implement the __call__ method.") 
+    def _compute(self, X, Y, condition_set=None, **kwargs):
+        raise NotImplementedError("Subclasses must implement _compute.")

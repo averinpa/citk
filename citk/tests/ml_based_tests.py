@@ -1,11 +1,14 @@
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
+from sklearn.ensemble import (
+    GradientBoostingRegressor,
+    HistGradientBoostingRegressor,
+    RandomForestClassifier,
+    RandomForestRegressor,
+)
 from typing import Optional, List
-import lightgbm as lgb
 from sklearn.model_selection import cross_val_predict, KFold
-from sklearn.linear_model import Ridge
-import dcor
+import statsmodels.api as sm
 
 from .base import CITKTest
 from causallearn.utils.cit import register_ci_test, KCI as KCI_test
@@ -22,12 +25,14 @@ class KCI(CITKTest):
     **kwargs : dict
         Additional keywords for the KCI test. See causal-learn documentation.
     """
+    supported_dtypes = {"continuous"}
+
     def __init__(self, data, **kwargs):
         super().__init__(data, **kwargs)
         self.check_cache_method_consistent('kci', "NO SPECIFIED PARAMETERS") # KCI handles its own params
         self.kci_instance = KCI_test(data, **kwargs)
 
-    def __call__(self, X, Y, condition_set=None, **kwargs):
+    def _compute(self, X, Y, condition_set=None, **kwargs):
         """
         Performs a Kernel Conditional Independence (KCI) test.
 
@@ -110,14 +115,7 @@ class KCI(CITKTest):
         1. X1 --- X3
         2. X2 --- X3
         """
-        _, _, _, cache_key = self.get_formatted_XYZ_and_cachekey(X, Y, condition_set)
-        if cache_key in self.pvalue_cache:
-            return float(self.pvalue_cache[cache_key])
-        
-        p_value = self.kci_instance(X, Y, condition_set)
-        
-        self.pvalue_cache[cache_key] = str(p_value)
-        return p_value
+        return float(self.kci_instance(X, Y, condition_set))
 
 register_ci_test("kci", KCI)
 
@@ -137,6 +135,8 @@ class RandomForest(CITKTest):
     random_state : int, optional
         Seed for the random number generator for reproducibility.
     """
+    supported_dtypes = {"continuous", "discrete"}
+
     def __init__(self, data: np.ndarray, **kwargs):
         super().__init__(data, **kwargs)
         self.df = pd.DataFrame(data)
@@ -147,7 +147,7 @@ class RandomForest(CITKTest):
         params = f"n_est={self.n_estimators},n_perm={self.num_permutations},seed={self.random_state}"
         self.check_cache_method_consistent('rf', params)
 
-    def __call__(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
+    def _compute(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
         """
         Performs a conditional independence test using Random Forest feature importance.
 
@@ -232,16 +232,6 @@ class RandomForest(CITKTest):
         1. X1 --- X3
         2. X2 --- X3
         """
-        if condition_set is None:
-            condition_set = []
-        else:
-            # Ensure condition_set is a list, as causal-learn can pass it as a tuple
-            condition_set = list(condition_set)
-
-        _, _, _, cache_key = self.get_formatted_XYZ_and_cachekey(X, Y, condition_set)
-        if cache_key in self.pvalue_cache:
-            return float(self.pvalue_cache[cache_key])
-
         # Define predictor and target variables
         x_name, y_name = str(X), str(Y)
         condition_names = [str(c) for c in condition_set]
@@ -251,7 +241,7 @@ class RandomForest(CITKTest):
         y_series = self.df[y_name]
         
         # Determine if it's a classification or regression task
-        is_classification = y_series.nunique() <= 10 or pd.api.types.is_categorical_dtype(y_series.dtype)
+        is_classification = y_series.nunique() <= 10 or y_series.dtype.name == "category"
         
         # --- Conditional Case: Permutation test on feature importance ---
         if condition_names:
@@ -305,8 +295,7 @@ class RandomForest(CITKTest):
                 
             p_value = (np.sum(permuted_r2 >= observed_r2) + 1) / (self.num_permutations + 1)
         
-        self.pvalue_cache[cache_key] = str(p_value)
-        return p_value
+        return float(p_value)
 
 register_ci_test("rf", RandomForest)
 
@@ -339,17 +328,25 @@ def _get_dml_residuals(model, data, x_idx, y_idx, z_idx, cv_folds=5):
     
     return U, V
 
-def _dcor_test(x, y, n_perms=499):
+def _residual_regression_test(x, y):
     """
-    The final-stage p-value test based on distance correlation.
-    Uses the dcor library's built-in permutation test for robustness.
+    Final-stage p-value via linear regression between residuals.
     """
-    # Using the library's built-in permutation test is more robust
-    # than a manual implementation.
-    result = dcor.independence.distance_covariance_test(x, y, num_resamples=n_perms)
-    return result.p_value
+    x = np.asarray(x).reshape(-1)
+    y = np.asarray(y).reshape(-1)
+    X = sm.add_constant(x, has_constant="add")
+    fit = sm.OLS(y, X).fit()
 
-def _conformalized_ci_test(data, x_idx, y_idx, z_idx, alpha=0.1, cv_folds=5, n_perms=199):
+    if len(fit.pvalues) < 2:
+        return 1.0
+    p_value = float(fit.pvalues[1])
+    if np.isnan(p_value):
+        return 1.0
+    return p_value
+
+def _conformalized_ci_test(
+    data, x_idx, y_idx, z_idx, alpha=0.1, cv_folds=5, n_perms=199, quantile_model_factory=None
+):
     """Performs the Conformalized Residual Independence Test (CRIT)."""
     X_target, Y_target = data[:, x_idx], data[:, y_idx]
     if not z_idx:
@@ -357,28 +354,37 @@ def _conformalized_ci_test(data, x_idx, y_idx, z_idx, alpha=0.1, cv_folds=5, n_p
     else:
         Z_features = pd.DataFrame(data[:, z_idx], columns=[f'z{i}' for i in range(len(z_idx))])
 
-    if Z_features.empty: # Unconditional case, just run dcor test
-        return _dcor_test(X_target, Y_target, n_perms=n_perms)
+    if Z_features.empty:
+        return _residual_regression_test(X_target, Y_target)
 
     all_indices, all_true_x, all_true_y = np.array([], dtype=int), np.array([]), np.array([])
     all_preds_x_low, all_preds_x_high = np.array([]), np.array([])
     all_preds_y_low, all_preds_y_high = np.array([]), np.array([])
     kf = KFold(n_splits=cv_folds, shuffle=True, random_state=42)
 
-    lgbm_params = {'objective': 'quantile', 'metric': 'quantile', 'n_estimators': 400, 'learning_rate': 0.05, 'verbose': -1}
+    if quantile_model_factory is None:
+        quantile_model_factory = lambda q: GradientBoostingRegressor(
+            loss="quantile",
+            alpha=q,
+            n_estimators=300,
+            learning_rate=0.05,
+            random_state=42,
+        )
 
     for train_idx, calib_idx in kf.split(Z_features):
         Z_train, X_train, Y_train = Z_features.iloc[train_idx], X_target[train_idx], Y_target[train_idx]
         Z_calib = Z_features.iloc[calib_idx]
         
         # Train and predict for X
-        model_x_low, model_x_high = lgb.LGBMRegressor(**lgbm_params, alpha=alpha/2), lgb.LGBMRegressor(**lgbm_params, alpha=1-alpha/2)
+        model_x_low = quantile_model_factory(alpha / 2)
+        model_x_high = quantile_model_factory(1 - alpha / 2)
         model_x_low.fit(Z_train, X_train); model_x_high.fit(Z_train, X_train)
         all_preds_x_low = np.concatenate([all_preds_x_low, model_x_low.predict(Z_calib)])
         all_preds_x_high = np.concatenate([all_preds_x_high, model_x_high.predict(Z_calib)])
 
         # Train and predict for Y
-        model_y_low, model_y_high = lgb.LGBMRegressor(**lgbm_params, alpha=alpha/2), lgb.LGBMRegressor(**lgbm_params, alpha=1-alpha/2)
+        model_y_low = quantile_model_factory(alpha / 2)
+        model_y_high = quantile_model_factory(1 - alpha / 2)
         model_y_low.fit(Z_train, Y_train); model_y_high.fit(Z_train, Y_train)
         all_preds_y_low = np.concatenate([all_preds_y_low, model_y_low.predict(Z_calib)])
         all_preds_y_high = np.concatenate([all_preds_y_high, model_y_high.predict(Z_calib)])
@@ -403,7 +409,7 @@ def _conformalized_ci_test(data, x_idx, y_idx, z_idx, alpha=0.1, cv_folds=5, n_p
     widths_y = (preds_y_high - preds_y_low) + 2 * q_y
     V = (true_y - centers_y) / np.where(widths_y == 0, 1, widths_y)
     
-    return _dcor_test(U, V, n_perms=n_perms)
+    return _residual_regression_test(U, V)
 
 def _e_value_dml_ci_test(U, V, betting_folds=2):
     """Calculates an e-value on pre-computed residuals."""
@@ -416,7 +422,11 @@ def _e_value_dml_ci_test(U, V, betting_folds=2):
         V_test = V[test_idx]
         
         # Use a non-linear model for the betting strategy to capture complex relationships
-        betting_model = lgb.LGBMRegressor(n_estimators=50, learning_rate=0.1, verbose=-1)
+        betting_model = HistGradientBoostingRegressor(
+            max_iter=100,
+            learning_rate=0.1,
+            random_state=123,
+        )
         betting_model.fit(U_train_df, V_train)
         bets = betting_model.predict(U_test_df)
         e_process_fold = 1 + np.clip(bets, -0.9, 0.9) * V_test
@@ -440,22 +450,27 @@ class DML(CITKTest):
     data : np.ndarray
         The dataset from which to run the test.
     model : scikit-learn compatible regressor, optional
-        The model used to predict X from Z and Y from Z. Defaults to LightGBM.
+        The model used to predict X from Z and Y from Z. Defaults to HistGradientBoostingRegressor.
     cv_folds : int, optional
         The number of folds for cross-fitting.
     n_perms : int, optional
-        The number of permutations for the final distance correlation test.
+        Deprecated. Kept for backward compatibility.
     """
+    supported_dtypes = {"continuous"}
+
     def __init__(self, data: np.ndarray, **kwargs):
         super().__init__(data, **kwargs)
-        self.model = kwargs.get('model', lgb.LGBMRegressor(n_estimators=250, learning_rate=0.05, verbose=-1))
+        self.model = kwargs.get(
+            'model',
+            HistGradientBoostingRegressor(max_iter=250, learning_rate=0.05, random_state=42),
+        )
         self.cv_folds = kwargs.get('cv_folds', 5)
         self.n_perms = kwargs.get('n_perms', 199)
         model_name = self.model.__class__.__name__
         params = f"model={model_name},cv={self.cv_folds},n_perms={self.n_perms}"
         self.check_cache_method_consistent('dml', params)
 
-    def __call__(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
+    def _compute(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
         """
         Performs a Double Machine Learning (DML) based conditional independence test.
 
@@ -474,7 +489,7 @@ class DML(CITKTest):
         Returns
         -------
         p_value : float
-            The p-value from the distance correlation test on the residuals.
+            The p-value from residual regression on the residuals.
 
         .. seealso::
             For a detailed explanation of the statistical test, including mathematical
@@ -497,7 +512,7 @@ class DML(CITKTest):
             Y = np.cos(Z) + np.random.randn(n) * 0.2
             data = np.vstack([X, Y, Z]).T
 
-            # Initialize the test (uses LightGBM by default)
+            # Initialize the test (uses HistGradientBoostingRegressor by default)
             dml_test = DML(data)
 
             # Test for unconditional independence (should be dependent)
@@ -533,18 +548,10 @@ class DML(CITKTest):
             1. X1 --- X3
             2. X2 --- X3
             """
-        if condition_set is None: condition_set = []
-        else: condition_set = list(condition_set)
-        
-        _, _, _, cache_key = self.get_formatted_XYZ_and_cachekey(X, Y, condition_set)
-        if cache_key in self.pvalue_cache:
-            return float(self.pvalue_cache[cache_key])
-
         U, V = _get_dml_residuals(self.model, self.data, X, Y, condition_set, cv_folds=self.cv_folds)
-        p_value = _dcor_test(U, V, n_perms=self.n_perms)
+        p_value = _residual_regression_test(U, V)
 
-        self.pvalue_cache[cache_key] = str(p_value)
-        return p_value
+        return float(p_value)
 
 register_ci_test("dml", DML)
 
@@ -561,17 +568,20 @@ class CRIT(CITKTest):
     cv_folds : int, optional
         The number of folds for cross-fitting.
     n_perms : int, optional
-        The number of permutations for the final distance correlation test.
+        Deprecated. Kept for backward compatibility.
     """
+    supported_dtypes = {"continuous"}
+
     def __init__(self, data: np.ndarray, **kwargs):
         super().__init__(data, **kwargs)
         self.alpha = kwargs.get('alpha', 0.1)
         self.cv_folds = kwargs.get('cv_folds', 5)
         self.n_perms = kwargs.get('n_perms', 199)
+        self.quantile_model_factory = kwargs.get('quantile_model_factory', None)
         params = f"alpha={self.alpha},cv={self.cv_folds},n_perms={self.n_perms}"
         self.check_cache_method_consistent('crit', params)
 
-    def __call__(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
+    def _compute(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
         """
         Performs a Conformalized Residual Independence Test (CRIT).
 
@@ -590,7 +600,7 @@ class CRIT(CITKTest):
         Returns
         -------
         p_value : float
-            The p-value from the distance correlation test on the conformalized residuals.
+            The p-value from residual regression on the conformalized residuals.
 
     .. seealso::
         For a detailed explanation of the statistical test, including mathematical
@@ -648,18 +658,18 @@ class CRIT(CITKTest):
         1. X1 --- X3
         2. X2 --- X3
         """
-        if condition_set is None: condition_set = []
-        else: condition_set = list(condition_set)
-        
-        _, _, _, cache_key = self.get_formatted_XYZ_and_cachekey(X, Y, condition_set)
-        if cache_key in self.pvalue_cache:
-            return float(self.pvalue_cache[cache_key])
+        p_value = _conformalized_ci_test(
+            self.data,
+            X,
+            Y,
+            condition_set,
+            alpha=self.alpha,
+            cv_folds=self.cv_folds,
+            n_perms=self.n_perms,
+            quantile_model_factory=self.quantile_model_factory,
+        )
 
-        p_value = _conformalized_ci_test(self.data, X, Y, condition_set, 
-                                        alpha=self.alpha, cv_folds=self.cv_folds, n_perms=self.n_perms)
-
-        self.pvalue_cache[cache_key] = str(p_value)
-        return p_value
+        return float(p_value)
 
 register_ci_test("crit", CRIT)
 
@@ -672,22 +682,27 @@ class EDML(CITKTest):
     data : np.ndarray
         The dataset from which to run the test.
     model : scikit-learn compatible regressor, optional
-        The model used to predict X from Z and Y from Z. Defaults to LightGBM.
+        The model used to predict X from Z and Y from Z. Defaults to HistGradientBoostingRegressor.
     cv_folds : int, optional
         The number of folds for cross-fitting the residual models.
     betting_folds : int, optional
         The number of folds for the e-value betting mechanism.
     """
+    supported_dtypes = {"continuous"}
+
     def __init__(self, data: np.ndarray, **kwargs):
         super().__init__(data, **kwargs)
-        self.model = kwargs.get('model', lgb.LGBMRegressor(n_estimators=250, learning_rate=0.05, verbose=-1))
+        self.model = kwargs.get(
+            'model',
+            HistGradientBoostingRegressor(max_iter=250, learning_rate=0.05, random_state=42),
+        )
         self.cv_folds = kwargs.get('cv_folds', 5)
         self.betting_folds = kwargs.get('betting_folds', 2)
         model_name = self.model.__class__.__name__
         params = f"model={model_name},cv={self.cv_folds},bet_folds={self.betting_folds}"
         self.check_cache_method_consistent('edml', params)
 
-    def __call__(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
+    def _compute(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
         """
         Performs an E-Value Double Machine Learning (EDML) CI test.
 
@@ -766,13 +781,6 @@ class EDML(CITKTest):
         1. X1 --- X3
         2. X2 --- X3
         """
-        if condition_set is None: condition_set = []
-        else: condition_set = list(condition_set)
-        
-        _, _, _, cache_key = self.get_formatted_XYZ_and_cachekey(X, Y, condition_set)
-        if cache_key in self.pvalue_cache:
-            return float(self.pvalue_cache[cache_key])
-
         U, V = _get_dml_residuals(self.model, self.data, X, Y, condition_set, cv_folds=self.cv_folds)
         e_value = _e_value_dml_ci_test(U, V, betting_folds=self.betting_folds)
         
@@ -780,7 +788,6 @@ class EDML(CITKTest):
         # Ensure p-value is at most 1.
         p_value = min(1.0, 1.0 / e_value if e_value > 0 else float('inf'))
 
-        self.pvalue_cache[cache_key] = str(p_value)
-        return p_value
+        return float(p_value)
 
-register_ci_test("edml", EDML) 
+register_ci_test("edml", EDML)

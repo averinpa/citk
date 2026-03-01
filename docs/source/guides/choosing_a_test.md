@@ -9,14 +9,21 @@ Here are the primary factors to consider when selecting a test:
 ### 1. Data Type
 
 - **Continuous Data**: If your variables are all continuous, you have several options:
-    - `fisherz`: Assumes linear relationships and multivariate normal data. It is very fast but may fail if these assumptions are violated.
+    - `fisherz_citk`: Assumes linear relationships and multivariate normal data. It is very fast but may fail if these assumptions are violated.
     - `spearman`: A non-parametric alternative that works on ranked data. It is suitable for monotonic (but not necessarily linear) relationships.
-    - `kci`: A kernel-based test that can capture complex, non-linear relationships. It is powerful but computationally more intensive.
+    - `kci`: A kernel-based test for complex, non-linear relationships. It is more computationally intensive.
+    - `rcot`, `rcit`: Optional R-backed kernel/random-feature tests from the RCIT package.
+    - `reg`: Likelihood-ratio test via linear regression (OLS).
+    - `rf`, `dml`, `crit`, `edml`: Flexible ML-based options for non-linear structure.
 
 - **Discrete Data**: If your variables are categorical:
-    - `gsq` (G-Square) or `chisq` (Chi-Square): Both are classical tests for discrete data based on contingency tables. `gsq` is often preferred for theoretical reasons, especially with smaller sample sizes.
+    - `gsq` (G-Square) or `chisq` (Chi-Square): Classical tests based on contingency tables.
+    - `logit`: GLM-based likelihood-ratio test for binary outcomes.
+    - `pois`: GLM-based likelihood-ratio test for count outcomes.
 
-- **Mixed Data**: When you have a combination of continuous and discrete variables, you currently need to discretize your continuous data to use tests like `gsq` or `chisq`. Future versions may include dedicated tests for mixed data.
+- **Mixed Data**: Current built-in options are limited; discretization is still a practical baseline for `gsq`/`chisq`.
+    - `disc_chisq`, `disc_gsq`: Equal-frequency discretization adapters around classical discrete tests.
+    - `dummy_fisherz`: One-hot encoding adapter with Fisher-Z aggregation.
 
 ### 2. Relationship Type
 
@@ -26,10 +33,17 @@ Here are the primary factors to consider when selecting a test:
 
 ## Summary Table
 
-| Test Name      | Data Type       | Relationship Type | Key Assumption(s)                                |
-|----------------|-----------------|-------------------|--------------------------------------------------|
-| `fisherz`      | Continuous      | Linear            | Multivariate normality                           |
-| `spearman`     | Continuous      | Monotonic         | Monotonicity                                     |
-| `gsq` / `chisq`  | Discrete        | Any               | Adequate sample size for contingency table cells |
-| `kci`          | Continuous      | Any               | None (non-parametric)                            |
-| `rf` / `dml`   | Continuous      | Any               | None (non-parametric)                            | 
+| Test Name | Data Type | Relationship Type | Key Assumption(s) |
+|-----------|-----------|-------------------|-------------------|
+| `fisherz_citk` | Continuous | Linear | Approximate Gaussianity |
+| `spearman` | Continuous | Monotonic | Monotonicity |
+| `reg` | Continuous | Mostly linear | Correct linear specification |
+| `gsq` / `chisq` | Discrete | Any | Adequate contingency support |
+| `logit` | Discrete (binary target) | Any | Logistic GLM fit is appropriate |
+| `pois` | Discrete (count target) | Any | Poisson GLM fit is appropriate |
+| `kci` | Continuous | Any | Kernel CI approximation |
+| `rcot` / `rcit` | Continuous | Any | Requires `rpy2` + R `RCIT` package |
+| `rf` / `dml` / `crit` / `edml` | Continuous | Any | ML residualization quality |
+| `gcm_linear` / `gcm_rf` / `wgcm_rf` | Continuous | Any | Residual covariance test |
+| `disc_chisq` / `disc_gsq` | Mixed or continuous | Any | Discretization quality |
+| `dummy_fisherz` | Mixed or discrete | Any | One-hot encoding fidelity |

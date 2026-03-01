@@ -1,9 +1,39 @@
 # Installation
 
-You can install `citk` directly from its GitHub repository using `pip`:
+## Quick Install
+
+Install `citk` directly from GitHub:
 
 ```bash
 pip install git+https://github.com/averinpa/citk.git
 ```
 
-It is recommended to install the library within a virtual environment to manage dependencies cleanly. 
+## Development Setup (uv)
+
+```bash
+uv sync --all-extras
+```
+
+This installs core, docs, dev, and optional R integration dependencies declared in `pyproject.toml`.
+
+## Optional LightGBM Extra
+
+LightGBM is not required for core `citk` functionality. Install only if you want to pass LightGBM models explicitly:
+
+```bash
+uv sync --extra ml
+```
+
+## Optional R-Based Setup
+
+R-backed tests are optional. They require:
+
+1. Python package `rpy2` (already in the `r` extra)
+2. R package `RCIT` from GitHub repository `ericstrobl/RCIT`
+3. R package `bnlearn` from CRAN
+
+Example:
+
+```bash
+uv sync --extra r
+```

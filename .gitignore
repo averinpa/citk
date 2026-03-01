@@ -73,9 +73,6 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# pyenv
-.python-version
-
 # celery beat schedule file
 celerybeat-schedule
 
@@ -116,11 +113,13 @@ dmypy.json
 # Files generated during development
 causallearnex.py
 instructions.md
+agent.md
 
 # Build artifacts and caches
 citk.egg-info/
 /examples/cache/
 /notebooks/examples/cache/
+uv.lock
 
 # macOS
 .DS_Store 

@@ -1,0 +1,175 @@
+import importlib
+
+import numpy as np
+import pytest
+
+from citk.tests.simple_tests import FisherZ, Spearman, GSq, ChiSq
+from citk.tests.statistical_model_tests import Regression, Logit, Poisson
+from citk.tests.extended_tests import DiscChiSq, DiscGSq, DummyFisherZ, GCMLinear, GCMRF, WGCMRF
+
+
+def _continuous_data(seed: int = 0, n: int = 250):
+    rng = np.random.default_rng(seed)
+    x = rng.normal(size=n)
+    y_ind = rng.normal(size=n)
+    y_dep = x + 0.2 * rng.normal(size=n)
+    data_ind = np.column_stack([x, y_ind])
+    data_dep = np.column_stack([x, y_dep])
+    return data_ind, data_dep
+
+
+def _discrete_data(seed: int = 1, n: int = 400):
+    rng = np.random.default_rng(seed)
+    x = rng.integers(0, 3, size=n)
+    y_ind = rng.integers(0, 3, size=n)
+    y_dep = x.copy()
+    flip = rng.random(n) < 0.1
+    y_dep[flip] = rng.integers(0, 3, size=flip.sum())
+    data_ind = np.column_stack([x, y_ind])
+    data_dep = np.column_stack([x, y_dep])
+    return data_ind, data_dep
+
+
+def _binary_target_data(seed: int = 2, n: int = 500):
+    rng = np.random.default_rng(seed)
+    x = rng.normal(size=n)
+    y_ind = rng.integers(0, 2, size=n)
+    y_dep = (x + 0.25 * rng.normal(size=n) > 0).astype(int)
+    data_ind = np.column_stack([x, y_ind])
+    data_dep = np.column_stack([x, y_dep])
+    return data_ind, data_dep
+
+
+def _count_target_data(seed: int = 3, n: int = 500):
+    rng = np.random.default_rng(seed)
+    x = rng.normal(size=n)
+    y_ind = rng.poisson(1.5, size=n)
+    rate_dep = np.exp(0.7 * x)
+    y_dep = rng.poisson(rate_dep)
+    data_ind = np.column_stack([x, y_ind])
+    data_dep = np.column_stack([x, y_dep])
+    return data_ind, data_dep
+
+
+@pytest.mark.parametrize("test_cls", [FisherZ, Spearman, Regression])
+def test_continuous_smoke(test_cls):
+    data_ind, data_dep = _continuous_data()
+    p_ind = test_cls(data_ind)(0, 1)
+    p_dep = test_cls(data_dep)(0, 1)
+    assert p_ind > 0.05
+    assert p_dep < 0.05
+
+
+@pytest.mark.parametrize("test_cls", [GSq, ChiSq])
+def test_discrete_smoke(test_cls):
+    data_ind, data_dep = _discrete_data()
+    p_ind = test_cls(data_ind)(0, 1)
+    p_dep = test_cls(data_dep)(0, 1)
+    assert p_ind > 0.05
+    assert p_dep < 0.05
+
+
+def test_logit_smoke():
+    data_ind, data_dep = _binary_target_data()
+    p_ind = Logit(data_ind)(0, 1)
+    p_dep = Logit(data_dep)(0, 1)
+    assert p_ind > 0.05
+    assert p_dep < 0.05
+
+
+def test_poisson_smoke():
+    data_ind, data_dep = _count_target_data()
+    p_ind = Poisson(data_ind)(0, 1)
+    p_dep = Poisson(data_dep)(0, 1)
+    assert p_ind > 0.05
+    assert p_dep < 0.05
+
+
+def test_kci_smoke():
+    ml_module = importlib.import_module("citk.tests.ml_based_tests")
+    data_ind, data_dep = _continuous_data(seed=4, n=150)
+    p_ind = ml_module.KCI(data_ind)(0, 1)
+    p_dep = ml_module.KCI(data_dep)(0, 1)
+    assert p_ind > 0.05
+    assert p_dep < 0.05
+
+
+def test_random_forest_smoke():
+    ml_module = importlib.import_module("citk.tests.ml_based_tests")
+    data_ind, data_dep = _continuous_data(seed=5, n=250)
+    rf_kwargs = {"num_permutations": 39, "random_state": 42, "n_estimators": 100}
+    p_ind = ml_module.RandomForest(data_ind, **rf_kwargs)(0, 1)
+    p_dep = ml_module.RandomForest(data_dep, **rf_kwargs)(0, 1)
+    assert p_ind > 0.05
+    assert p_dep < 0.05
+
+
+def test_dml_smoke():
+    ml_module = importlib.import_module("citk.tests.ml_based_tests")
+    from sklearn.linear_model import LinearRegression
+
+    data_ind, data_dep = _continuous_data(seed=6, n=220)
+    dml_kwargs = {"model": LinearRegression(), "cv_folds": 5, "n_perms": 49}
+    p_ind = ml_module.DML(data_ind, **dml_kwargs)(0, 1)
+    p_dep = ml_module.DML(data_dep, **dml_kwargs)(0, 1)
+    assert p_ind > 0.05
+    assert p_dep < 0.05
+
+
+def test_crit_smoke():
+    ml_module = importlib.import_module("citk.tests.ml_based_tests")
+    data_ind, data_dep = _continuous_data(seed=7, n=220)
+    crit_kwargs = {"alpha": 0.1, "cv_folds": 3, "n_perms": 49}
+    p_ind = ml_module.CRIT(data_ind, **crit_kwargs)(0, 1)
+    p_dep = ml_module.CRIT(data_dep, **crit_kwargs)(0, 1)
+    assert p_ind > 0.05
+    assert p_dep < 0.05
+
+
+def test_edml_smoke():
+    ml_module = importlib.import_module("citk.tests.ml_based_tests")
+    from sklearn.linear_model import LinearRegression
+
+    data_ind, data_dep = _continuous_data(seed=8, n=220)
+    edml_kwargs = {"model": LinearRegression(), "cv_folds": 5, "betting_folds": 2}
+    p_ind = ml_module.EDML(data_ind, **edml_kwargs)(0, 1)
+    p_dep = ml_module.EDML(data_dep, **edml_kwargs)(0, 1)
+    assert p_ind > 0.05
+    assert p_dep < 0.05
+
+
+@pytest.mark.parametrize("test_cls", [DiscChiSq, DiscGSq])
+def test_discretize_adapters_smoke(test_cls):
+    data_ind, data_dep = _continuous_data(seed=10, n=300)
+    p_ind = test_cls(data_ind, n_bins=4)(0, 1)
+    p_dep = test_cls(data_dep, n_bins=4)(0, 1)
+    assert p_ind > 0.05
+    assert p_dep < 0.05
+
+
+def test_dummy_fisherz_smoke():
+    data_ind, data_dep = _discrete_data(seed=11, n=400)
+    p_ind = DummyFisherZ(data_ind)(0, 1)
+    p_dep = DummyFisherZ(data_dep)(0, 1)
+    assert p_ind > 0.05
+    assert p_dep < 0.05
+
+
+@pytest.mark.parametrize("test_cls", [GCMLinear, GCMRF, WGCMRF])
+def test_gcm_family_smoke(test_cls):
+    data_ind, data_dep = _continuous_data(seed=12, n=300)
+    p_ind = test_cls(data_ind)(0, 1)
+    p_dep = test_cls(data_dep)(0, 1)
+    assert p_ind > 0.05
+    assert p_dep < 0.05
+
+
+def test_rcot_missing_rpy2_has_clear_error():
+    if importlib.util.find_spec("rpy2") is not None:
+        pytest.skip("rpy2 is installed; missing-dependency path is not applicable")
+
+    from citk.tests.r_based_tests import RCoT
+
+    data_ind, _ = _continuous_data(seed=9, n=80)
+    with pytest.raises(ImportError, match="rpy2"):
+        RCoT(data_ind)(0, 1)

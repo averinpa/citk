@@ -9,6 +9,8 @@ from causallearn.utils.cit import register_ci_test, NO_SPECIFIED_PARAMETERS_MSG
 
 def _glm_conditional_independence_test(df: pd.DataFrame, x: int, y: int, z: List[int],
                                        model_class, family=None, **kwargs):
+    # Avoid mutating caller-owned DataFrames.
+    df = df.copy()
     # Convert integer indices to string column names for the formula
     x_name = f'v{x}'
     y_name = f'v{y}'
@@ -50,12 +52,14 @@ def _glm_conditional_independence_test(df: pd.DataFrame, x: int, y: int, z: List
 
 class Regression(CITKTest):
     """CI test for continuous targets using Linear Regression (OLS)."""
+    supported_dtypes = {"continuous"}
+
     def __init__(self, data: np.ndarray, **kwargs):
         super().__init__(data, **kwargs)
         self.df = pd.DataFrame(data)
         self.check_cache_method_consistent('reg', NO_SPECIFIED_PARAMETERS_MSG)
 
-    def __call__(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
+    def _compute(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
         """
         Performs a conditional independence test for continuous data using a likelihood-ratio test
         between nested Ordinary Least Squares (OLS) linear regression models.
@@ -135,25 +139,24 @@ class Regression(CITKTest):
         1. X1 --- X3
         2. X2 --- X3
         """
-        if condition_set is None: condition_set = []
-        _, _, _, cache_key = self.get_formatted_XYZ_and_cachekey(X, Y, condition_set)
-        if cache_key in self.pvalue_cache:
-            return float(self.pvalue_cache[cache_key])
-
-        p_value = _glm_conditional_independence_test(self.df, X, Y, condition_set, model_class=sm.OLS)
-        self.pvalue_cache[cache_key] = str(p_value)
-        return float(p_value)
+        return float(
+            _glm_conditional_independence_test(
+                self.df, X, Y, condition_set, model_class=sm.OLS
+            )
+        )
 
 register_ci_test("reg", Regression)
 
 class Logit(CITKTest):
     """CI test for binary targets using Logistic Regression."""
+    supported_dtypes = {"discrete"}
+
     def __init__(self, data: np.ndarray, **kwargs):
         super().__init__(data, **kwargs)
         self.df = pd.DataFrame(data)
         self.check_cache_method_consistent('logit', NO_SPECIFIED_PARAMETERS_MSG)
 
-    def __call__(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
+    def _compute(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
         """
         Performs a conditional independence test for binary data using a likelihood-ratio test
         between nested Logistic Regression models.
@@ -248,25 +251,24 @@ class Logit(CITKTest):
         1. X1 --- X3
         2. X2 --- X3
         """
-        if condition_set is None: condition_set = []
-        _, _, _, cache_key = self.get_formatted_XYZ_and_cachekey(X, Y, condition_set)
-        if cache_key in self.pvalue_cache:
-            return float(self.pvalue_cache[cache_key])
-
-        p_value = _glm_conditional_independence_test(self.df, X, Y, condition_set, model_class=sm.Logit)
-        self.pvalue_cache[cache_key] = str(p_value)
-        return float(p_value)
+        return float(
+            _glm_conditional_independence_test(
+                self.df, X, Y, condition_set, model_class=sm.Logit
+            )
+        )
 
 register_ci_test("logit", Logit)
 
 class Poisson(CITKTest):
     """CI test for count targets using Poisson Regression."""
+    supported_dtypes = {"discrete"}
+
     def __init__(self, data: np.ndarray, **kwargs):
         super().__init__(data, **kwargs)
         self.df = pd.DataFrame(data)
         self.check_cache_method_consistent('pois', NO_SPECIFIED_PARAMETERS_MSG)
 
-    def __call__(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
+    def _compute(self, X: int, Y: int, condition_set: Optional[List[int]] = None, **kwargs) -> float:
         """
         Performs a conditional independence test for count data using a likelihood-ratio test
         between nested Poisson Regression models.
@@ -354,13 +356,15 @@ class Poisson(CITKTest):
         1. X1 --- X3
         2. X2 --- X3
         """
-        if condition_set is None: condition_set = []
-        _, _, _, cache_key = self.get_formatted_XYZ_and_cachekey(X, Y, condition_set)
-        if cache_key in self.pvalue_cache:
-            return float(self.pvalue_cache[cache_key])
-
-        p_value = _glm_conditional_independence_test(self.df, X, Y, condition_set, model_class=sm.GLM, family=sm.families.Poisson())
-        self.pvalue_cache[cache_key] = str(p_value)
-        return float(p_value)
+        return float(
+            _glm_conditional_independence_test(
+                self.df,
+                X,
+                Y,
+                condition_set,
+                model_class=sm.GLM,
+                family=sm.families.Poisson(),
+            )
+        )
 
 register_ci_test("pois", Poisson) 
