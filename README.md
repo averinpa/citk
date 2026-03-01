@@ -61,26 +61,26 @@ print(cg.G.get_edges())
 
 | Test Name | Family | Wrapped From |
 |---|---|---|
-| `fisherz_citk` | Simple | `causal-learn` (`CIT(..., method_name="fisherz")`) |
-| `spearman` | Simple | `causal-learn` Fisher-Z on ranked data |
-| `gsq` | Simple | `causal-learn` (`Chisq_or_Gsq(..., method_name="gsq")`) |
-| `chisq` | Simple | `causal-learn` (`Chisq_or_Gsq(..., method_name="chisq")`) |
-| `kci` | Optional R-Based | R `RCIT::KCIT` via `rpy2` (capped at n=2000) |
+| `fisherz_citk` | Partial Correlation | `causal-learn` (`CIT(..., method_name="fisherz")`) |
+| `spearman` | Partial Correlation | `causal-learn` Fisher-Z on ranked data |
+| `gsq` | Contingency Table | `causal-learn` (`Chisq_or_Gsq(..., method_name="gsq")`) |
+| `chisq` | Contingency Table | `causal-learn` (`Chisq_or_Gsq(..., method_name="chisq")`) |
+| `kci` | Kernel | R `RCIT::KCIT` via `rpy2` (optional; capped at n=2000) |
+| `rcot` | Kernel | R `RCIT::RCoT` via `rpy2` (optional) |
+| `rcit` | Kernel | R `RCIT::RCIT` via `rpy2` (optional) |
+| `regci` | Regression | `tigramite.independence_tests.regressionCI.RegressionCI` (optional) |
+| `cmiknn` | Nearest Neighbor | `tigramite.independence_tests.cmiknn.CMIknn` (optional) |
+| `cmiknn_mixed` | Nearest Neighbor | `tigramite` CMIknnMixed wrapper (optional) |
 | `rf` | ML-Based | `scikit-learn` RandomForest + permutation CI |
 | `dml` | ML-Based | `scikit-learn` residualization + `statsmodels` residual regression test |
 | `crit` | ML-Based | `scikit-learn` quantile models + `statsmodels` residual regression test |
 | `edml` | ML-Based | `scikit-learn` residualization + e-value betting |
-| `gcm_linear` | GCM | Native `citk` (OLS residualization + asymptotic normal test) |
-| `gcm_rf` | GCM | Native `citk` (RandomForest residualization + asymptotic normal test) |
-| `wgcm_rf` | GCM | Native `citk` (sample-split weighted GCM with RandomForest) |
+| `gcm_linear` | ML-Based | Native `citk` (OLS residualization + asymptotic normal test) |
+| `gcm_rf` | ML-Based | Native `citk` (RandomForest residualization + asymptotic normal test) |
+| `wgcm_rf` | ML-Based | Native `citk` (sample-split weighted GCM with RandomForest) |
 | `disc_chisq` | Adapter | Native `citk` equal-frequency discretization + `causal-learn` Chi-Square |
 | `disc_gsq` | Adapter | Native `citk` equal-frequency discretization + `causal-learn` G-Square |
 | `dummy_fisherz` | Adapter | Native `citk` one-hot encoding + `causal-learn` Fisher-Z aggregation |
-| `hartemink_chisq` | Adapter (Optional R-Based) | R `bnlearn` Hartemink discretization + `causal-learn` Chi-Square |
-| `rcot` | Optional R-Based | R `RCIT::RCoT` via `rpy2` |
-| `rcit` | Optional R-Based | R `RCIT::RCIT` via `rpy2` |
-| `cmiknn` | Optional Tigramite | `tigramite.independence_tests.cmiknn.CMIknn` |
-| `cmiknn_mixed` | Optional Tigramite | `tigramite` CMIknnMixed wrapper |
-| `regci` | Optional Tigramite | `tigramite.independence_tests.regressionCI.RegressionCI` |
+| `hartemink_chisq` | Adapter | R `bnlearn` Hartemink discretization + `causal-learn` Chi-Square (optional) |
 
 For detailed documentation on each test and its parameters, please see our full documentation page [HERE](https://averinpa.github.io/citk/).
